@@ -115,7 +115,7 @@ class DocumentManagerFactory {
 		$metadata = $this->metaDataManager->driver($config->getSettings());
 
 		if ($metadata instanceof MetaData) {
-			$configuration->setMetadataDriverImpl($metadata->resolve($config->getSetting('')));
+			$configuration->setMetadataDriverImpl($metadata->resolve($config->getSettings()));
 			$configuration->setClassMetadataFactoryName($metadata->getClassMetadataFactoryName());
 		} else {
 			$configuration->setMetadataDriverImpl($metadata);

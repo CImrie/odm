@@ -6,12 +6,14 @@ use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Query\FilterCollection;
 use Doctrine\ODM\MongoDB\Repository\RepositoryFactory;
 use Doctrine\ODM\MongoDB\Types\Type;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
 use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
+use LaravelDoctrine\ODM\Configuration\MetaData\Annotations;
 use LaravelDoctrine\ODM\DocumentManagerFactory;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
 use LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager;
@@ -208,6 +210,35 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		$this->assertCount($count + 1, Type::getTypesMap());
 		$this->assertContains('mytype', array_keys(Type::getTypesMap()));
 	}
+
+//	public function test_can_load_odm_metadata_driver()
+//	{
+//		$driver = m::mock(AnnotationDriver::class);
+//		$driver->shouldReceive('getClassMetadataFactoryName')
+//			->andReturn(ClassMetadataFactory::class);
+//
+//		$mappingDriver = m::mock(Annotations::class);
+//		$mappingDriver->shouldReceive('resolve')
+//			->andReturn();
+//
+//		$this->mappingDriver = $driver;
+//
+//		$this->metadataManager = m::mock(MetaDataManager::class);
+//		$this->metadataManager->shouldReceive('driver')
+//		                      ->once()
+//		                      ->andReturn($this->mappingDriver);
+//
+//		$factory = new DocumentManagerFactory(
+//			$this->configurationFactory,
+//			$this->connectionManager,
+//			$this->metadataManager,
+//			$this->cacheManager,
+//			$this->listenerRegistry
+//		);
+//
+//		$manager = $factory->create($this->config);
+//		$this->assertDocumentManager($manager);
+//	}
 
 	public function mockODMConfiguration()
 	{
