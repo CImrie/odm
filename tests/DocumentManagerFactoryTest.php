@@ -2,15 +2,18 @@
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Mapping\Annotations\AbstractField;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;
 use Doctrine\ODM\MongoDB\Query\FilterCollection;
 use Doctrine\ODM\MongoDB\Repository\RepositoryFactory;
+use Doctrine\ODM\MongoDB\Types\Type;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
-use LaravelDoctrine\ODM\Common\ListenerRegistry;
+use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
 use LaravelDoctrine\ODM\DocumentManagerFactory;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
 use LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager;
@@ -91,7 +94,7 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 	protected $cacheManager;
 
 	/**
-	 * @var ListenerRegistry | Mock
+	 * @var \LaravelDoctrine\ODM\Common\Registries\ListenerRegistry | Mock
 	 */
 	protected $listenerRegistry;
 
@@ -191,11 +194,22 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		$this->assertCount(1, $manager->getEventManager()->getListeners());
 		$this->assertContains('name', array_keys($manager->getEventManager()->getListeners()));
 	}
-//
-//	public function test_can_load_custom_types()
-//	{
-//
-//	}
+
+	public function test_can_load_custom_types()
+	{
+		$count = count(Type::getTypesMap());
+		$this->settings['odm_mapping_types'] = [
+			'mytype' => m::mock(Type::class)
+		];
+
+		$this->updateConfig();
+
+		$manager = $this->factory->create($this->config);
+
+		$this->assertDocumentManager($manager);
+		$this->assertCount($count + 1, Type::getTypesMap());
+		$this->assertContains('mytype', array_keys(Type::getTypesMap()));
+	}
 
 	public function mockODMConfiguration()
 	{
@@ -359,4 +373,7 @@ class OdmListenerStub {
 
 class OdmSubscriberStub {
 
+}
+
+class OdmCustomType extends Type {
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Common;
+namespace LaravelDoctrine\ODM\Common\Registries;
 
 
 use Doctrine\Common\EventSubscriber;
@@ -87,7 +87,7 @@ class ListenerRegistry {
 	 */
 	public function getListener($class)
 	{
-		return $this->listeners[$class];
+		return array_get($this->listeners, $class);
 	}
 
 	/**
@@ -97,6 +97,6 @@ class ListenerRegistry {
 	 */
 	public function getSubscriber($class)
 	{
-		return $this->subscribers[$class];
+		return array_get($this->subscribers, $class);
 	}
 }

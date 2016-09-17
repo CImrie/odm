@@ -36,6 +36,11 @@ class Config {
 		return array_get($this->managerSettings, $setting, $defaultValue);
 	}
 
+	public function getSettings()
+	{
+		return $this->managerSettings;
+	}
+
 	public function getDatabaseConnection($name = 'default')
 	{
 		return array_get($this->databaseConnections, $name);
