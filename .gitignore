@@ -1,5 +1,6 @@
 .idea/
 vendor/
+report
 node_modules/
 
 # Laravel 4 specific
