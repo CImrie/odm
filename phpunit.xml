@@ -12,10 +12,13 @@
         <testsuite name="Test Suite">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
-        <filter>
-            <whitelist>
-                <directory suffix=".php">./</directory>
-            </whitelist>
-        </filter>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+        <exclude>
+            <directory suffix=".php">./tests</directory>
+        </exclude>
+    </filter>
 </phpunit>
