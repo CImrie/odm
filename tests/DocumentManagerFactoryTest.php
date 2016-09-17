@@ -10,8 +10,7 @@ use Doctrine\ODM\MongoDB\Query\FilterCollection;
 use Doctrine\ODM\MongoDB\Repository\RepositoryFactory;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
-use LaravelDoctrine\ODM\Configuration\Connection\MongodbConnection;
-use LaravelDoctrine\ODM\Configuration\ODMConfigurationFactory;
+use LaravelDoctrine\ODM\Common\ListenerRegistry;
 use LaravelDoctrine\ODM\DocumentManagerFactory;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
 use LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager;
@@ -91,13 +90,20 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 	 */
 	protected $cacheManager;
 
+	/**
+	 * @var ListenerRegistry | Mock
+	 */
+	protected $listenerRegistry;
+
 	protected function setUp()
 	{
 		$this->updateConfig();
 		$this->mockODMConfiguration();
 		$this->mockMetadata();
+		$this->mockCacheManager();
 		$this->mockODMConfigurationFactory();
 
+		$this->listenerRegistry = m::mock(ListenerRegistry::class);
 		$this->setUpFactory();
 	}
 
@@ -138,23 +144,22 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		$this->assertContains('name', array_keys($manager->getFilterCollection()->getEnabledFilters()));
 	}
 
-//	public function test_can_load_extensions()
-//	{
-//
-//	}
-//
-//	public function test_can_enable_metadata_caching()
-//	{
-//		$this->settings[]
-//	}
-//
 	public function test_can_register_event_listeners()
 	{
 		$this->settings['events']['listeners'] = [
-			'name' => OdmListenerStub::class
+			'name' => OdmListenerStub::class,
 		];
 
 		$this->updateConfig();
+		$this->mockListenerRegistryListeners();
+
+		$this->factory = new DocumentManagerFactory(
+			$this->configurationFactory,
+			$this->connectionManager,
+			$this->metadataManager,
+			$this->cacheManager,
+			$this->listenerRegistry
+		);
 
 		$manager = $this->factory->create($this->config);
 
@@ -162,11 +167,30 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		$this->assertCount(1, $manager->getEventManager()->getListeners());
 		$this->assertContains('name', array_keys($manager->getEventManager()->getListeners()));
 	}
-//
-//	public function test_can_register_event_subscribers()
-//	{
-//
-//	}
+
+	public function test_can_register_event_subscribers()
+	{
+		$this->settings['events']['subscribers'] = [
+			'name' => OdmSubscriberStub::class,
+		];
+
+		$this->updateConfig();
+		$this->mockListenerRegistrySubscribers();
+
+		$this->factory = new DocumentManagerFactory(
+			$this->configurationFactory,
+			$this->connectionManager,
+			$this->metadataManager,
+			$this->cacheManager,
+			$this->listenerRegistry
+		);
+
+		$manager = $this->factory->create($this->config);
+
+		$this->assertDocumentManager($manager);
+		$this->assertCount(1, $manager->getEventManager()->getListeners());
+		$this->assertContains('name', array_keys($manager->getEventManager()->getListeners()));
+	}
 //
 //	public function test_can_load_custom_types()
 //	{
@@ -236,10 +260,6 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		$this->ODMConfiguration->shouldReceive('setMetadataDriverImpl')
 		                       ->once();
 
-//		$this->ODMConfiguration->shouldReceive('getMetadataDriverImpl')
-//		                       ->once()
-//		                       ->andReturn($this->mappingDriver);
-
 		$this->ODMConfiguration->shouldReceive('getClassMetadataFactoryName')
 		                       ->atLeast()->once()
 		                       ->andReturn(ClassMetadataFactory::class);
@@ -256,12 +276,8 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		                       ->once()
 		                       ->with($this->databaseConnectionsSettings['mongodb']['database']);
 
-//		$this->ODMConfiguration->shouldReceive('getDefaultDB')
-//		                       ->once()
-//		                       ->andReturn($this->databaseConnectionsSettings['mongodb']['database']);
-
 		/*
-		 *
+		 * Misc wiring
 		 */
 		$repoFactory = m::mock(RepositoryFactory::class);
 		$this->ODMConfiguration->shouldReceive('getRepositoryFactory')
@@ -288,8 +304,27 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		$this->metadataManager->shouldReceive('driver')
 		                      ->once()
 		                      ->andReturn($this->mappingDriver);
+	}
 
+	public function mockCacheManager()
+	{
 		$this->cacheManager = m::mock(CacheManager::class);
+	}
+
+	public function mockListenerRegistryListeners()
+	{
+		$this->listenerRegistry = m::mock(ListenerRegistry::class);
+		$this->listenerRegistry->shouldReceive('getListener')
+		                       ->once()
+		                       ->andReturn(m::mock(OdmListenerStub::class));
+	}
+
+	public function mockListenerRegistrySubscribers()
+	{
+		$this->listenerRegistry = m::mock(ListenerRegistry::class);
+		$this->listenerRegistry->shouldReceive('getSubscriber')
+		                       ->once()
+		                       ->andReturn(m::mock(OdmSubscriberStub::class));
 	}
 
 	public function setUpFactory()
@@ -298,7 +333,8 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 			$this->configurationFactory,
 			$this->connectionManager,
 			$this->metadataManager,
-			$this->cacheManager
+			$this->cacheManager,
+			$this->listenerRegistry
 		);
 	}
 
@@ -313,5 +349,14 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 	}
 }
 
-class OdmFilterStub {}
-class OdmListenerStub {}
+class OdmFilterStub {
+
+}
+
+class OdmListenerStub {
+
+}
+
+class OdmSubscriberStub {
+
+}
