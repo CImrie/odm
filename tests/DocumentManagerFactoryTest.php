@@ -13,11 +13,11 @@ use Doctrine\ODM\MongoDB\Types\Type;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
 use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
+use LaravelDoctrine\ODM\Configuration\Connections\ConnectionManager;
 use LaravelDoctrine\ODM\Configuration\MetaData\Annotations;
+use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
 use LaravelDoctrine\ODM\DocumentManagerFactory;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
-use LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager;
-use LaravelDoctrine\ORM\Configuration\MetaData\MetaDataManager;
 use Mockery as m;
 use Mockery\Mock as Mock;
 
