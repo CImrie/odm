@@ -1,8 +1,9 @@
 <?php
 
 
+use Doctrine\MongoDB\Connection;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ODM\Configuration\Connection\MongodbConnection;
+use LaravelDoctrine\ODM\Configuration\Connections\MongodbConnection;
 use Mockery as m;
 
 class MongodbConnectionTest extends \PHPUnit_Framework_TestCase {
@@ -21,16 +22,8 @@ class MongodbConnectionTest extends \PHPUnit_Framework_TestCase {
 				'password' => 'pass'
 			]
 		);
-
-		$this->assertEquals(
-			[
-				'driver' => 'mongodb',
-				'host' => 'host',
-				'port' => 27017,
-				'dbname' => 'test-db',
-				'user' => 'user',
-				'password' => 'pass'
-			]
-			, $resolved);
+		
+		$this->assertInstanceOf(Connection::class, $resolved);
+		$this->assertEquals("user:pass@host:27017/test-db", $resolved->getServer());
 	}
 }

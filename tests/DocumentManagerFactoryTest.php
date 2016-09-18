@@ -13,11 +13,11 @@ use Doctrine\ODM\MongoDB\Types\Type;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
 use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
+use LaravelDoctrine\ODM\Configuration\Connections\ConnectionManager;
 use LaravelDoctrine\ODM\Configuration\MetaData\Annotations;
+use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
 use LaravelDoctrine\ODM\DocumentManagerFactory;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
-use LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager;
-use LaravelDoctrine\ORM\Configuration\MetaData\MetaDataManager;
 use Mockery as m;
 use Mockery\Mock as Mock;
 
@@ -73,6 +73,9 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 			'database' => 'dbname',
 			'username' => 'user',
 			'password' => 'pass',
+			'options'  => [
+				'database' => 'admin',
+			],
 		],
 	];
 
@@ -197,9 +200,9 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 
 	public function test_can_load_custom_types()
 	{
-		$count = count(Type::getTypesMap());
+		$count                               = count(Type::getTypesMap());
 		$this->settings['odm_mapping_types'] = [
-			'mytype' => m::mock(Type::class)
+			'mytype' => m::mock(Type::class),
 		];
 
 		$this->updateConfig();
@@ -405,4 +408,5 @@ class OdmSubscriberStub {
 }
 
 class OdmCustomType extends Type {
+
 }

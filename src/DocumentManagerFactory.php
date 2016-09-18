@@ -6,14 +6,15 @@ namespace LaravelDoctrine\ODM;
 
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Types\Type;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
 use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
+use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
-use LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager;
+use LaravelDoctrine\ODM\Configuration\Connections\ConnectionManager;
 use LaravelDoctrine\ORM\Configuration\MetaData\MetaData;
-use LaravelDoctrine\ORM\Configuration\MetaData\MetaDataManager;
 
 class DocumentManagerFactory {
 
@@ -49,6 +50,7 @@ class DocumentManagerFactory {
 		$this->metaDataManager      = $metaDataManager;
 		$this->cacheManager         = $cacheManager;
 		$this->listenerRegistry     = $listenerRegistry;
+
 	}
 
 	public function create(Config $config)
@@ -67,7 +69,6 @@ class DocumentManagerFactory {
 		$configuration->setProxyDir($config->getSetting('proxies.path'));
 		$configuration->setProxyNamespace($config->getSetting('proxies.namespace'));
 		$configuration->setAutoGenerateProxyClasses($config->getSetting('proxies.auto_generate'));
-
 		/*
 		 * Hydrators
 		 */
@@ -112,7 +113,7 @@ class DocumentManagerFactory {
 
 	public function setMetadataDriver(Config $config, Configuration $configuration)
 	{
-		$metadata = $this->metaDataManager->driver($config->getSettings());
+		$metadata = $this->metaDataManager->driver($config->getSetting('meta'), $config->getSettings());
 
 		if ($metadata instanceof MetaData) {
 			$configuration->setMetadataDriverImpl($metadata->resolve($config->getSettings()));
