@@ -73,6 +73,9 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 			'database' => 'dbname',
 			'username' => 'user',
 			'password' => 'pass',
+			'options'  => [
+				'database' => 'admin',
+			],
 		],
 	];
 
@@ -197,9 +200,9 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 
 	public function test_can_load_custom_types()
 	{
-		$count = count(Type::getTypesMap());
+		$count                               = count(Type::getTypesMap());
 		$this->settings['odm_mapping_types'] = [
-			'mytype' => m::mock(Type::class)
+			'mytype' => m::mock(Type::class),
 		];
 
 		$this->updateConfig();
@@ -405,4 +408,5 @@ class OdmSubscriberStub {
 }
 
 class OdmCustomType extends Type {
+
 }
