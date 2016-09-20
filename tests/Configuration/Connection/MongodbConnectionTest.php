@@ -26,4 +26,18 @@ class MongodbConnectionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf(Connection::class, $resolved);
 		$this->assertEquals("user:pass@host:27017/test-db", $resolved->getServer());
 	}
+
+	public function test_can_build_connection_string_with_query_options() {
+		$config = m::mock(Repository::class);
+		$connection = new MongodbConnection($config);
+		$resolved = $connection->resolve(
+			[
+				'options' => [
+					'foo' => 'bar'
+				]
+			]
+		);
+
+		$this->assertEquals("localhost:27017?foo=bar", $resolved->getServer());
+	}
 }

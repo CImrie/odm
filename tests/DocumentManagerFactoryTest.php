@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\MongoDB\Connection;
@@ -77,6 +78,12 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		],
 	];
 
+	protected $globalConfig = [
+		'cache' => [
+			'default' => 'array'
+		]
+	];
+
 	protected $configurationFactory;
 
 	/**
@@ -102,9 +109,9 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 	protected function setUp()
 	{
 		$this->updateConfig();
+		$this->mockCacheManager();
 		$this->mockODMConfiguration();
 		$this->mockMetadata();
-		$this->mockCacheManager();
 		$this->mockODMConfigurationFactory();
 
 		$this->listenerRegistry = m::mock(ListenerRegistry::class);
@@ -308,6 +315,12 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 		                       ->atLeast()->once()
 		                       ->andReturn(ClassMetadataFactory::class);
 
+		/*
+		 * Test metadata caching
+		 */
+		$this->ODMConfiguration->shouldReceive('setMetadataCacheImpl')
+			->atLeast()->once()->with($this->cacheManager->driver());
+
 		$cache = m::mock(Cache::class);
 		$this->ODMConfiguration->shouldReceive('getMetadataCacheImpl')
 		                       ->atLeast()->once()
@@ -353,6 +366,7 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 	public function mockCacheManager()
 	{
 		$this->cacheManager = m::mock(CacheManager::class);
+		$this->cacheManager->shouldReceive('driver')->andReturn(m::mock(ArrayCache::class));
 	}
 
 	public function mockListenerRegistryListeners()
