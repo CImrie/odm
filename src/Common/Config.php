@@ -6,14 +6,26 @@ namespace LaravelDoctrine\ODM\Common;
 
 class Config {
 
+	/**
+	 * @var array
+	 */
 	protected $managerSettings;
 
+	/**
+	 * @var array
+	 */
 	protected $databaseConnections;
 
-	public function __construct(array $managerSettings = [], array $databaseConnections = [])
+	/**
+	 * @var array
+	 */
+	protected $globalSettings;
+
+	public function __construct(array $managerSettings = [], array $databaseConnections = [], array $globalSettings = [])
 	{
 		$this->managerSettings = $managerSettings;
 		$this->databaseConnections = $databaseConnections;
+		$this->globalSettings = $globalSettings;
 	}
 
 	public function getConnectionName()
@@ -44,5 +56,10 @@ class Config {
 	public function getDatabaseConnection($name = 'default')
 	{
 		return array_get($this->databaseConnections, $name);
+	}
+
+	public function getCacheDriver()
+	{
+		return array_get($this->globalSettings, 'cache.default');
 	}
 }

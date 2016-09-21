@@ -84,6 +84,7 @@ class DocumentManagerFactory {
 		/*
 		 * Caching
 		 */
+		$configuration->setMetadataCacheImpl($this->cacheManager->driver($config->getCacheDriver()));
 
 		/*
 		 * Manager is now ready for instantiation

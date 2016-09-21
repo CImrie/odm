@@ -7,6 +7,7 @@ namespace LaravelDoctrine\ODM;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Illuminate\Support\Collection;
 use Doctrine\ODM\MongoDB\Tools\Console\Command\ClearCache\MetadataCommand;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ODM\Common\Config;
@@ -39,7 +40,7 @@ class ODMServiceProvider extends ServiceProvider {
 	    $this->commands([
 	       MetadataCommand::class,
         ]);
-        
+
 		$this->mergeConfig();
 		//instantiate the registry
 		//foreach, add the manager to the registry
@@ -61,20 +62,14 @@ class ODMServiceProvider extends ServiceProvider {
 			// Add all managers into the registry
 			foreach ($app->make('config')->get('odm.managers', []) as $manager => $managerSettings) {
 				$connection = $app->make('config')->get('database.connections', []);
+				$globalSettings = (new Collection($app->make('config')->get('odm')))->except('odm.managers')->toArray();
 
-				$config = new Config($managerSettings, $connection);
+				$config = new Config($managerSettings, $connection, $globalSettings);
 				$registry->addManager($manager, $config);
 			}
 
 			return $registry;
 		});
-
-		// Once the registry get's resolved, we will call the resolve callbacks which were waiting for the registry
-//		$this->app->afterResolving('dm-registry', function (ManagerRegistry $registry, Container $container) {
-//			$this->bootExtensionManager();
-//
-//			BootChain::boot($registry);
-//		});
 
 		$this->app->alias('dm-registry', ManagerRegistry::class);
 		$this->app->alias('dm-registry', IlluminateRegistry::class);

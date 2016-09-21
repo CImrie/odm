@@ -6,7 +6,6 @@ namespace LaravelDoctrine\ODM;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Proxy;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\MongoDBException;
 use Illuminate\Contracts\Container\Container;
 use LaravelDoctrine\ODM\Common\Config;
