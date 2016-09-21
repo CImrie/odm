@@ -7,6 +7,7 @@ namespace LaravelDoctrine\ODM;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper;
 use Illuminate\Support\Collection;
 use Doctrine\ODM\MongoDB\Tools\Console\Command\ClearCache\MetadataCommand;
 use Illuminate\Support\ServiceProvider;
@@ -14,7 +15,10 @@ use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
 use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
 use LaravelDoctrine\ODM\Configuration\ODMConfigurationFactory;
+use LaravelDoctrine\ODM\Laravel\Console\ClearMetadataCommand;
+use LaravelDoctrine\ODM\Laravel\Console\QueryCommand;
 use LaravelDoctrine\ORM\Configuration\Manager;
+use Symfony\Component\Console\Helper\HelperSet;
 
 class ODMServiceProvider extends ServiceProvider {
 
@@ -37,10 +41,6 @@ class ODMServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-	    $this->commands([
-	       MetadataCommand::class,
-        ]);
-
 		$this->mergeConfig();
 		//instantiate the registry
 		//foreach, add the manager to the registry
@@ -51,6 +51,11 @@ class ODMServiceProvider extends ServiceProvider {
 		$this->registerEntityFactory();
 		//autoload proxies and hydrators
 		$this->registerAutoloader();
+
+		$this->commands([
+			ClearMetadataCommand::class,
+			QueryCommand::class
+		]);
 	}
 
 	public function registerManagerRegistry()
