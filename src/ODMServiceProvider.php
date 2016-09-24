@@ -7,18 +7,21 @@ namespace LaravelDoctrine\ODM;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper;
+use Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateHydratorsCommand;
 use Illuminate\Support\Collection;
-use Doctrine\ODM\MongoDB\Tools\Console\Command\ClearCache\MetadataCommand;
 use Illuminate\Support\ServiceProvider;
 use LaravelDoctrine\ODM\Common\Config;
 use LaravelDoctrine\ODM\Common\ConfigurationFactory;
-use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
 use LaravelDoctrine\ODM\Configuration\ODMConfigurationFactory;
 use LaravelDoctrine\ODM\Laravel\Console\ClearMetadataCommand;
+use LaravelDoctrine\ODM\Laravel\Console\CreateSchemaCommand;
+use LaravelDoctrine\ODM\Laravel\Console\DropSchemaCommand;
+use LaravelDoctrine\ODM\Laravel\Console\GenerateDocumentsCommand;
+use LaravelDoctrine\ODM\Laravel\Console\GenerateProxiesCommand;
+use LaravelDoctrine\ODM\Laravel\Console\GenerateRepositoriesCommand;
 use LaravelDoctrine\ODM\Laravel\Console\QueryCommand;
-use LaravelDoctrine\ORM\Configuration\Manager;
-use Symfony\Component\Console\Helper\HelperSet;
+use LaravelDoctrine\ODM\Laravel\Console\ShardSchemaCommand;
+use LaravelDoctrine\ODM\Laravel\Console\UpdateSchemaCommand;
 
 class ODMServiceProvider extends ServiceProvider {
 
@@ -51,11 +54,7 @@ class ODMServiceProvider extends ServiceProvider {
 		$this->registerEntityFactory();
 		//autoload proxies and hydrators
 		$this->registerAutoloader();
-
-		$this->commands([
-			ClearMetadataCommand::class,
-			QueryCommand::class
-		]);
+		$this->registerConsoleCommands();
 	}
 
 	public function registerManagerRegistry()
@@ -126,6 +125,22 @@ class ODMServiceProvider extends ServiceProvider {
 				);
 			}
 		});
+	}
+
+	public function registerConsoleCommands()
+	{
+		$this->commands([
+			ClearMetadataCommand::class,
+			QueryCommand::class,
+			GenerateDocumentsCommand::class,
+			GenerateHydratorsCommand::class,
+			GenerateProxiesCommand::class,
+			GenerateRepositoriesCommand::class,
+			CreateSchemaCommand::class,
+			DropSchemaCommand::class,
+			UpdateSchemaCommand::class,
+			ShardSchemaCommand::class,
+		]);
 	}
 
 	/**
