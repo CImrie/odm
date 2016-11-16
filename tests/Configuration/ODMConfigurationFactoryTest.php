@@ -1,10 +1,11 @@
 <?php
 
+namespace Tests\Configuration;
 
 use Doctrine\ODM\MongoDB\Configuration;
 use LaravelDoctrine\ODM\Configuration\ODMConfigurationFactory;
 
-class ODMConfigurationFactoryTest extends PHPUnit_Framework_TestCase {
+class ODMConfigurationFactoryTest extends \PHPUnit_Framework_TestCase  {
 
 	public function test_can_create_odm_configuration()
 	{

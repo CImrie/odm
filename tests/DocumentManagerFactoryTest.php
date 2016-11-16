@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
@@ -20,7 +22,7 @@ use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
 use Mockery as m;
 use Mockery\Mock as Mock;
 
-class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
+class DocumentManagerFactoryTest extends \PHPUnit_Framework_TestCase  {
 
 	/**
 	 * @var DocumentManagerFactory
