@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Mapping\References;
+namespace CImrie\ODM\Mapping\References;
 
 
 class OneToMany {

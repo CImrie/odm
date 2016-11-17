@@ -1,14 +1,14 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM;
+namespace CImrie\ODM;
 
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\Proxy;
 use Doctrine\ODM\MongoDB\MongoDBException;
 use Illuminate\Contracts\Container\Container;
-use LaravelDoctrine\ODM\Common\Config;
+use CImrie\ODM\Common\Config;
 use MongoDB\Exception\InvalidArgumentException;
 
 class IlluminateRegistry implements ManagerRegistry {

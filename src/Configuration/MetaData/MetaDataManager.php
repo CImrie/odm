@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Configuration\MetaData;
+namespace CImrie\ODM\Configuration\MetaData;
 
 
 use Illuminate\Contracts\Container\Container;

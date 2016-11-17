@@ -3,7 +3,7 @@
 namespace Tests\Configuration\MetaData;
 
 use Illuminate\Container\Container;
-use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
+use CImrie\ODM\Configuration\MetaData\MetaDataManager;
 use Mockery as m;
 
 class MetaDataManagerTest extends \PHPUnit_Framework_TestCase  {
@@ -12,7 +12,7 @@ class MetaDataManagerTest extends \PHPUnit_Framework_TestCase  {
 		$container = m::mock(Container::class);
 		$manager = new MetaDataManager($container);
 
-		$this->assertEquals(\LaravelDoctrine\ODM\Configuration\MetaData::class, $manager->getNamespace());
+		$this->assertEquals(\CImrie\ODM\Configuration\MetaData::class, $manager->getNamespace());
 	}
 
 }

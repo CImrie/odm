@@ -3,7 +3,7 @@
 namespace Tests\Configuration;
 
 use Doctrine\ODM\MongoDB\Configuration;
-use LaravelDoctrine\ODM\Configuration\ODMConfigurationFactory;
+use CImrie\ODM\Configuration\ODMConfigurationFactory;
 
 class ODMConfigurationFactoryTest extends \PHPUnit_Framework_TestCase  {
 

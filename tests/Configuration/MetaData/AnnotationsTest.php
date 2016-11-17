@@ -4,7 +4,7 @@ namespace Tests\Configuration\MetaData;
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
-use LaravelDoctrine\ODM\Configuration\MetaData\Annotations;
+use CImrie\ODM\Configuration\MetaData\Annotations;
 
 class AnnotationsTest extends \PHPUnit_Framework_TestCase  {
 

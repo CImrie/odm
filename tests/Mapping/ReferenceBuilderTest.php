@@ -4,7 +4,7 @@
 namespace Tests\Mapping;
 
 
-use LaravelDoctrine\ODM\Mapping\Reference;
+use CImrie\ODM\Mapping\Reference;
 
 class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 

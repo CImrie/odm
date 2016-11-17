@@ -3,7 +3,7 @@
 namespace Tests\Mapping;
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
-use LaravelDoctrine\ODM\Mapping\ClassMetadataBuilder;
+use CImrie\ODM\Mapping\ClassMetadataBuilder;
 use Tests\Models\TestUser;
 use Tests\Repositories\TestRepository;
 

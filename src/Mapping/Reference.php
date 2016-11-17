@@ -1,9 +1,9 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Mapping;
+namespace CImrie\ODM\Mapping;
 
-use LaravelDoctrine\ODM\Mapping\References\Reference as ReferenceInterface;
+use CImrie\ODM\Mapping\References\Reference as ReferenceInterface;
 
 
 class Reference implements ReferenceInterface {

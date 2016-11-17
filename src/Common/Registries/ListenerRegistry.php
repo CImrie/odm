@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Common\Registries;
+namespace CImrie\ODM\Common\Registries;
 
 
 use Doctrine\Common\EventSubscriber;
@@ -12,7 +12,7 @@ use Doctrine\Common\EventSubscriber;
  * Manages the in-memory storage and retrieval of fully instantiated listeners and subscribers, ready for use
  * in an event manager.
  *
- * @package LaravelDoctrine\ODM\Common
+ * @package CImrie\ODM\Common
  */
 class ListenerRegistry {
 
