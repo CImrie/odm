@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Laravel\Console;
+namespace CImrie\ODM\Laravel\Console;
 
 
 class GenerateRepositoriesCommand extends ODMCommand {

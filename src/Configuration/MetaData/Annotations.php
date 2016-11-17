@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Configuration\MetaData;
+namespace CImrie\ODM\Configuration\MetaData;
 
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;

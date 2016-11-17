@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
@@ -10,17 +12,17 @@ use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;
 use Doctrine\ODM\MongoDB\Query\FilterCollection;
 use Doctrine\ODM\MongoDB\Repository\RepositoryFactory;
 use Doctrine\ODM\MongoDB\Types\Type;
-use LaravelDoctrine\ODM\Common\Config;
-use LaravelDoctrine\ODM\Common\ConfigurationFactory;
-use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
-use LaravelDoctrine\ODM\Configuration\Connections\ConnectionManager;
-use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
-use LaravelDoctrine\ODM\DocumentManagerFactory;
+use CImrie\ODM\Common\Config;
+use CImrie\ODM\Common\ConfigurationFactory;
+use CImrie\ODM\Common\Registries\ListenerRegistry;
+use CImrie\ODM\Configuration\Connections\ConnectionManager;
+use CImrie\ODM\Configuration\MetaData\MetaDataManager;
+use CImrie\ODM\DocumentManagerFactory;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
 use Mockery as m;
 use Mockery\Mock as Mock;
 
-class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
+class DocumentManagerFactoryTest extends \PHPUnit_Framework_TestCase  {
 
 	/**
 	 * @var DocumentManagerFactory
@@ -102,7 +104,7 @@ class DocumentManagerFactoryTest extends PHPUnit_Framework_TestCase {
 	protected $cacheManager;
 
 	/**
-	 * @var \LaravelDoctrine\ODM\Common\Registries\ListenerRegistry | Mock
+	 * @var \CImrie\ODM\Common\Registries\ListenerRegistry | Mock
 	 */
 	protected $listenerRegistry;
 

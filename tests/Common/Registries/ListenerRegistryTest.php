@@ -1,11 +1,13 @@
 <?php
 
+namespace Tests\Common\Registries;
+
 
 use Doctrine\Common\EventSubscriber;
-use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
+use CImrie\ODM\Common\Registries\ListenerRegistry;
 use Mockery as m;
 
-class ListenerRegistryTest extends PHPUnit_Framework_TestCase {
+class ListenerRegistryTest extends \PHPUnit_Framework_TestCase  {
 
 	/**
 	 * @var ListenerRegistry
@@ -30,7 +32,7 @@ class ListenerRegistryTest extends PHPUnit_Framework_TestCase {
 	{
 		$listeners = [
 			m::mock(ListenerStub::class),
-			m::mock(AnotherListenerStub::class)
+			m::mock(AnotherListenerStub::class),
 		];
 
 		$this->registry->addListeners($listeners);
@@ -51,7 +53,7 @@ class ListenerRegistryTest extends PHPUnit_Framework_TestCase {
 	{
 		$subscribers = [
 			m::mock(SubscriberStub::class),
-			m::mock(AnotherSubscriberStub::class)
+			m::mock(AnotherSubscriberStub::class),
 		];
 
 		$this->registry->addSubscribers($subscribers);

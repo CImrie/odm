@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Configuration\Connections;
+namespace CImrie\ODM\Configuration\Connections;
 
 
 class ConnectionManager extends \LaravelDoctrine\ORM\Configuration\Connections\ConnectionManager {

@@ -1,9 +1,10 @@
 <?php
 
+namespace Tests\Configuration\Connections;
 
 use Doctrine\MongoDB\Connection;
 use Illuminate\Contracts\Config\Repository;
-use LaravelDoctrine\ODM\Configuration\Connections\MongodbConnection;
+use CImrie\ODM\Configuration\Connections\MongodbConnection;
 use Mockery as m;
 
 class MongodbConnectionTest extends \PHPUnit_Framework_TestCase {

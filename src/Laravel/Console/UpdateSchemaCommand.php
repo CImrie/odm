@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Laravel\Console;
+namespace CImrie\ODM\Laravel\Console;
 
 
 use Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\UpdateCommand;

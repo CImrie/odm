@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM;
+namespace CImrie\ODM;
 
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -10,18 +10,18 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateHydratorsCommand;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use LaravelDoctrine\ODM\Common\Config;
-use LaravelDoctrine\ODM\Common\ConfigurationFactory;
-use LaravelDoctrine\ODM\Configuration\ODMConfigurationFactory;
-use LaravelDoctrine\ODM\Laravel\Console\ClearMetadataCommand;
-use LaravelDoctrine\ODM\Laravel\Console\CreateSchemaCommand;
-use LaravelDoctrine\ODM\Laravel\Console\DropSchemaCommand;
-use LaravelDoctrine\ODM\Laravel\Console\GenerateDocumentsCommand;
-use LaravelDoctrine\ODM\Laravel\Console\GenerateProxiesCommand;
-use LaravelDoctrine\ODM\Laravel\Console\GenerateRepositoriesCommand;
-use LaravelDoctrine\ODM\Laravel\Console\QueryCommand;
-use LaravelDoctrine\ODM\Laravel\Console\ShardSchemaCommand;
-use LaravelDoctrine\ODM\Laravel\Console\UpdateSchemaCommand;
+use CImrie\ODM\Common\Config;
+use CImrie\ODM\Common\ConfigurationFactory;
+use CImrie\ODM\Configuration\ODMConfigurationFactory;
+use CImrie\ODM\Laravel\Console\ClearMetadataCommand;
+use CImrie\ODM\Laravel\Console\CreateSchemaCommand;
+use CImrie\ODM\Laravel\Console\DropSchemaCommand;
+use CImrie\ODM\Laravel\Console\GenerateDocumentsCommand;
+use CImrie\ODM\Laravel\Console\GenerateProxiesCommand;
+use CImrie\ODM\Laravel\Console\GenerateRepositoriesCommand;
+use CImrie\ODM\Laravel\Console\QueryCommand;
+use CImrie\ODM\Laravel\Console\ShardSchemaCommand;
+use CImrie\ODM\Laravel\Console\UpdateSchemaCommand;
 
 class ODMServiceProvider extends ServiceProvider {
 
