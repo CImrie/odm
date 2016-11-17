@@ -1,4 +1,17 @@
 {
+    "name": "cimrie/odm",
+    "type": "library",
+    "description": "Doctrine MongoDB ODM integration with Laravel. Aim to be interoperable with other frameworks.",
+    "keywords": ["doctrine", "odm", "mongodb", "laravel"],
+    "homepage": "https://github.com/CImrie/odm",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Connor Imrie",
+            "homepage": "https://connorimrie.com",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "laravel-doctrine/orm": "^1.2",
         "alcaeus/mongo-php-adapter": "^1.0",
