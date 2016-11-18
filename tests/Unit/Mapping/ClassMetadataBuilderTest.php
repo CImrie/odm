@@ -29,7 +29,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 
 	public function setUp()
 	{
-		$this->cm = new ClassMetadata(\Tests\Unit\Models\TestUser::class);
+		$this->cm = new ClassMetadata(TestUser::class);
 		$this->builder = new ClassMetadataBuilder($this->cm);
 	}
 
