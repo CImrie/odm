@@ -1,19 +1,19 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM;
+namespace CImrie\ODM;
 
 
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Types\Type;
-use LaravelDoctrine\ODM\Common\Config;
-use LaravelDoctrine\ODM\Common\ConfigurationFactory;
-use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
-use LaravelDoctrine\ODM\Configuration\MetaData\MetaDataManager;
+use CImrie\ODM\Common\Config;
+use CImrie\ODM\Common\ConfigurationFactory;
+use CImrie\ODM\Common\Registries\ListenerRegistry;
+use CImrie\ODM\Configuration\MetaData\MetaDataManager;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
-use LaravelDoctrine\ODM\Configuration\Connections\ConnectionManager;
+use CImrie\ODM\Configuration\Connections\ConnectionManager;
 use LaravelDoctrine\ORM\Configuration\MetaData\MetaData;
 
 class DocumentManagerFactory {
@@ -39,7 +39,7 @@ class DocumentManagerFactory {
 	protected $cacheManager;
 
 	/**
-	 * @var \LaravelDoctrine\ODM\Common\Registries\ListenerRegistry
+	 * @var \CImrie\ODM\Common\Registries\ListenerRegistry
 	 */
 	protected $listenerRegistry;
 

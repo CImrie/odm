@@ -1,11 +1,11 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Mapping;
+namespace CImrie\ODM\Mapping;
 
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
-use LaravelDoctrine\ODM\Exceptions\DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException;
+use CImrie\ODM\Exceptions\DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException;
 
 class ClassMetadataBuilder {
 

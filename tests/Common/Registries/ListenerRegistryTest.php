@@ -4,7 +4,7 @@ namespace Tests\Common\Registries;
 
 
 use Doctrine\Common\EventSubscriber;
-use LaravelDoctrine\ODM\Common\Registries\ListenerRegistry;
+use CImrie\ODM\Common\Registries\ListenerRegistry;
 use Mockery as m;
 
 class ListenerRegistryTest extends \PHPUnit_Framework_TestCase  {

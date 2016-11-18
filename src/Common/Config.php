@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Common;
+namespace CImrie\ODM\Common;
 
 
 class Config {

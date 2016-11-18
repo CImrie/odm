@@ -1,11 +1,11 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Configuration;
+namespace CImrie\ODM\Configuration;
 
 
 use Doctrine\ODM\MongoDB\Configuration;
-use LaravelDoctrine\ODM\Common\ConfigurationFactory;
+use CImrie\ODM\Common\ConfigurationFactory;
 
 class ODMConfigurationFactory implements ConfigurationFactory {
 

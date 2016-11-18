@@ -5,8 +5,8 @@ namespace Tests\Mapping;
 
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
-use LaravelDoctrine\ODM\Mapping\Reference;
 use Tests\Models\TestUser;
+use CImrie\ODM\Mapping\Reference;
 
 class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 
@@ -98,7 +98,7 @@ class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_can_reference_one_to_one()
 	{
-        
+
 	}
 
 	public function test_can_reference_one_to_many()
@@ -128,6 +128,6 @@ class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 
 	private function assertFluentSetter($builder)
 	{
-		$this->assertInstanceOf(\LaravelDoctrine\ODM\Mapping\References\Reference::class, $builder);
+		$this->assertInstanceOf(\CImrie\ODM\Mapping\References\Reference::class, $builder);
 	}
 }

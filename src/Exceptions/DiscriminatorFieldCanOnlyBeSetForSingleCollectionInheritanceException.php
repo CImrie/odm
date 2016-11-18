@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Exceptions;
+namespace CImrie\ODM\Exceptions;
 
 
 class DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException extends \Exception {

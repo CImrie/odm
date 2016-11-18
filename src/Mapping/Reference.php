@@ -1,11 +1,11 @@
 <?php
 
 
-namespace LaravelDoctrine\ODM\Mapping;
+namespace CImrie\ODM\Mapping;
 
-use LaravelDoctrine\ODM\Mapping\References\Many;
-use LaravelDoctrine\ODM\Mapping\References\One;
 
+use CImrie\ODM\Mapping\References\Many;
+use CImrie\ODM\Mapping\References\One;
 
 class Reference {
 
