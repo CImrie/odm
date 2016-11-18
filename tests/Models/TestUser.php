@@ -7,4 +7,6 @@ class TestUser {
 	protected $name;
 
 	protected $user;
+
+    protected $followers;
 }
