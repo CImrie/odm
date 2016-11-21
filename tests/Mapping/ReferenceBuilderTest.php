@@ -98,7 +98,23 @@ class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_can_reference_one_to_one()
 	{
+        $builder = $this->builder->one(
+            $property = 'user',
+            TestUser::class
+        )->mappedBy('user')
+            ;
 
+        $this->cm->mapOneReference($builder->asArray());
+
+        $this->assertFluentSetter($builder);
+        $this->assertArraySubset(
+            [
+                'mappedBy' => 'user'
+            ],
+            $this->cm->fieldMappings['user']
+        );
+
+        // todo! - need to test mapping both ways with different entities
 	}
 
 	public function test_can_reference_one_to_many()
