@@ -5,6 +5,8 @@ namespace Tests\Mapping;
 
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
+use Doctrine\ODM\MongoDB\Tests\Events\User;
+use Tests\Models\Profile;
 use Tests\Models\TestUser;
 use CImrie\ODM\Mapping\Reference;
 
@@ -98,24 +100,42 @@ class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_can_reference_one_to_one()
 	{
+        // Set up User->Profile Side
+        $builder = $this->builder->one(
+            $property = 'profile',
+            $targetDocument = Profile::class
+        )->inversedBy('user')
+            ;
+
+        $userCm = $this->cm;
+        $userCm->mapOneReference($builder->asArray());
+
+        // Set up Profile->User Side
         $builder = $this->builder->one(
             $property = 'user',
             TestUser::class
-        )->mappedBy('user')
-            ;
+        )->mappedBy('profile');
 
-        $this->cm->mapOneReference($builder->asArray());
+        $profileCm = new ClassMetadataInfo(Profile::class);
+        $profileCm->mapOneReference($builder->asArray());
 
-        $this->assertFluentSetter($builder);
+
         $this->assertArraySubset(
             [
-                'mappedBy' => 'user'
+                'inversedBy' => 'user'
             ],
-            $this->cm->fieldMappings['user']
+            $userCm->fieldMappings['profile']
         );
 
-        // todo! - need to test mapping both ways with different entities
-	}
+        $this->assertArraySubset(
+            [
+                'mappedBy' => 'profile'
+            ],
+            $profileCm->fieldMappings['user']
+        );
+
+        $this->assertFluentSetter($builder);
+    }
 
 	public function test_can_reference_one_to_many()
 	{
