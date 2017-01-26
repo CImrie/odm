@@ -5,14 +5,10 @@ namespace Tests\Mapping;
 
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
-<<<<<<< a1891b3087aae50b29a8886b022d7514b72c2e2f
-=======
 use Doctrine\ODM\MongoDB\Tests\Events\User;
 use Tests\Models\Profile;
 use Tests\Models\TestUser;
->>>>>>> Test OneToOne
 use CImrie\ODM\Mapping\Reference;
-use Tests\Unit\Models\TestUser;
 
 class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase {
 

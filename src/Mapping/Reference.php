@@ -3,10 +3,10 @@
 
 namespace CImrie\ODM\Mapping;
 
-use CImrie\ODM\Mapping\References\Many;
-use CImrie\ODM\Mapping\References\One;
 use CImrie\ODM\Mapping\References\Reference as ReferenceInterface;
 
+use CImrie\ODM\Mapping\References\Many;
+use CImrie\ODM\Mapping\References\One;
 
 class Reference {
 
