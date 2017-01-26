@@ -11,6 +11,7 @@ use CImrie\ODM\Configuration\MetaData\Metadata;
 use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
 use CImrie\ODM\Extensions\ExtensionManager;
 use CImrie\ODM\Laravel\Traits\OdmConfig;
+use CImrie\ODM\Logging\Logger;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -41,7 +42,7 @@ class OdmServiceProvider extends ServiceProvider
     {
         $this->publishes([
             $this->getConfigPath() => config_path($this->getConfigName() . '.php'),
-        ], 'config');
+        ], 'odm');
     }
 
     /**
@@ -53,17 +54,26 @@ class OdmServiceProvider extends ServiceProvider
     {
         $this->mergeConfig();
 
-        /*
-         * Get all the metadata driver implementations and add them to the registry, available for use
-         */
+        $this->registerMetadataDriverRegistry();
+        $this->registerConnectionFactories();
+        $this->registerQueryLogger();
+        $this->registerManagerRegistry();
+        $this->registerDefaultDocumentManager();
+        $this->registerAutoloader();
+        $this->registerConsoleCommands();
+        $this->registerExtensions();
+    }
+
+    public function registerMetadataDriverRegistry()
+    {
         $this->app->tag($this->getConfig('metadata_drivers'), Metadata::class);
-        $this->app->singleton(MetaDataRegistry::class, function (\Illuminate\Container\Container $app) {
+        $this->app->singleton(MetaDataRegistry::class, function (Container $app) {
             return new MetaDataRegistry($app->tagged(Metadata::class));
         });
+    }
 
-        /*
-         * Register factories
-         */
+    public function registerConnectionFactories()
+    {
         $this->app->tag($this->getConfig('connection_factories'), ConnectionFactory::class);
         $this->app->singleton(ConnectionResolver::class, function (Container $app) {
             $factories = $app->tagged(ConnectionFactory::class);
@@ -76,15 +86,13 @@ class OdmServiceProvider extends ServiceProvider
 
             return new ConnectionResolver($keyedFactories, $app->make('config')->get('database.connections'));
         });
+    }
 
-        $this->registerManagerRegistry();
-        $this->registerDefaultDocumentManager();
-        $this->registerAutoloader();
-        $this->registerConsoleCommands();
-
-        if ($this->getConfig('use_extensions')) //todo make config option for extensions
+    public function registerQueryLogger()
+    {
+        if($logger = $this->getConfig('logger'))
         {
-            $this->app->register(OdmExtensionServiceProvider::class);
+            $this->app->bind(Logger::class, $logger);
         }
     }
 
@@ -151,6 +159,14 @@ class OdmServiceProvider extends ServiceProvider
             UpdateSchemaCommand::class,
             ShardSchemaCommand::class,
         ]);
+    }
+
+    public function registerExtensions()
+    {
+        if ($this->getConfig('use_extensions'))
+        {
+            $this->app->register(OdmExtensionServiceProvider::class);
+        }
     }
 
     /**

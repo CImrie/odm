@@ -5,6 +5,7 @@ namespace CImrie\ODM;
 
 
 use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
+use CImrie\ODM\Logging\Logger;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -42,13 +43,19 @@ class DocumentManagerFactory {
      */
     protected $metadata;
 
-    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, CacheManager $cacheManager, ListenerRegistry $listenerRegistry)
+    /**
+     * @var Logger | null
+     */
+    protected $logger;
+
+    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, CacheManager $cacheManager = null, ListenerRegistry $listenerRegistry, Logger $logger = null)
 	{
 		$this->configurationFactory = $configurationFactory;
 		$this->connectionResolver    = $connectionResolver;
 		$this->cacheManager         = $cacheManager;
 		$this->listenerRegistry     = $listenerRegistry;
         $this->metadata = $metadata;
+        $this->logger = $logger;
     }
 
 	public function create(Config $config)
@@ -82,7 +89,18 @@ class DocumentManagerFactory {
 		/*
 		 * Caching
 		 */
-		$configuration->setMetadataCacheImpl($this->cacheManager->driver($config->getCacheDriver()));
+		if($this->cacheManager)
+        {
+            $configuration->setMetadataCacheImpl($this->cacheManager->driver($config->getCacheDriver()));
+        }
+
+		/*
+		 * Logging
+		 */
+		if($this->logger)
+        {
+            $configuration->setLoggerCallable($this->logger->closure());
+        }
 
 		/*
 		 * Manager is now ready for instantiation
@@ -191,7 +209,7 @@ class DocumentManagerFactory {
 	 */
 	protected function registerMappingTypes(Config $config)
 	{
-		$types = $config->getSetting('odm_mapping_types') ?: [];
+		$types = $config->getSetting('mapping_types') ?: [];
 		foreach($types as $dbType => $doctrineType)
 		{
 			if(!Type::hasType($dbType))
