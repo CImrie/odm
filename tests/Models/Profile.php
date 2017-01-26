@@ -3,7 +3,7 @@
 
 namespace Tests\Models;
 
-use CImrie\ODM\Configuration\MetaData\Annotations as ODM;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 
 /**
  * Class Profile

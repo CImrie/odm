@@ -42,19 +42,19 @@ class DocumentManagerTest extends \TestCase
         $this->assertInstanceOf(TimestampableListener::class, array_first($eventListeners));
     }
 
-    public function test_can_load_specific_documents_into_mapping_driver()
-    {
-        $this->load();
-        $config = (object) $this->app->make('config')->get('odm');
-
-        $config->managers['default']['documents'] = [SpecificEntity::class];
-        $config->metadata_drivers = [Annotations::class];
-
-        $this->app->make('config')->set('odm', (array) $config);
-
-//        dd($this->dm->getClassMetadata(SpecificEntity::class));
-//        dd($this->dm->getConfiguration()->getMetadataDriverImpl()->getAllClassNames());
-    }
+//    public function test_can_load_specific_documents_into_mapping_driver()
+//    {
+//        $this->load();
+//        $config = (object) $this->app->make('config')->get('odm');
+//
+//        $config->managers['default']['documents'] = [SpecificEntity::class];
+//        $config->metadata_drivers = [Annotations::class];
+//
+//        $this->app->make('config')->set('odm', (array) $config);
+//
+////        dd($this->dm->getClassMetadata(SpecificEntity::class));
+////        dd($this->dm->getConfiguration()->getMetadataDriverImpl()->getAllClassNames());
+//    }
 }
 
 /**
