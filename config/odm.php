@@ -1,20 +1,21 @@
 <?php
 
+use CImrie\ODM\Configuration\Connections\MongodbConnectionFactory;
+use CImrie\ODM\Configuration\MetaData\Annotations;
+
 return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Entity Mangers
+	| Document Mangers
 	|--------------------------------------------------------------------------
 	|
-	| Configure your Entity Managers here. You can set a different connection
-	| and driver per manager and configure events and filters. Change the
-	| paths setting to the appropriate path and replace App namespace
-	| by your own namespace.
+	| Configure your Document Manager(s). You can have more than one, but
+	| keep in mind that extensions are loaded and enabled across all managers.
 	|
-	| Available meta drivers: fluent|annotations|yaml|xml|config|static_php|php
+	| Available meta driver(s): annotations
 	|
-	| Available connections: mysql|oracle|pgsql|sqlite|sqlsrv
+	| Available connection(s): mongodb
 	| (Connections can be configured in the database config)
 	|
 	| --> Warning: Proxy auto generation should only be enabled in dev!
@@ -23,14 +24,17 @@ return [
 	'managers'                  => [
 		'default' => [
 			'dev'        => env('APP_DEBUG'),
-			'meta'       => env('DOCTRINE_METADATA', 'annotations'),
+			'meta'       => env('DOCTRINE_METADATA', Annotations::class),
 			'connection' => env('DB_CONNECTION', 'mongodb'),
-			'namespaces' => [
-				'App'
-			],
-			'paths'      => [
-				base_path('app/Auth/Entities')
-			],
+//            'documents' => [
+//
+//            ],
+//			'namespaces' => [
+////				'App',
+//			],
+//			'paths'      => [
+////				base_path('app')
+//			],
 			'repository' => Doctrine\ODM\MongoDB\DocumentRepository::class,
 			'proxies'    => [
 				'namespace'     => 'Proxies',
@@ -94,17 +98,9 @@ return [
 	| laravel-doctrine/extensions in your composer.json
 	|
 	*/
+	'use_extensions' => true,
 	'extensions'                => [
-		//LaravelDoctrine\ORM\Extensions\TablePrefix\TablePrefixExtension::class,
-		//LaravelDoctrine\Extensions\Timestamps\TimestampableExtension::class,
-		//LaravelDoctrine\Extensions\SoftDeletes\SoftDeleteableExtension::class,
-		//LaravelDoctrine\Extensions\Sluggable\SluggableExtension::class,
-		//LaravelDoctrine\Extensions\Sortable\SortableExtension::class,
-		//LaravelDoctrine\Extensions\Tree\TreeExtension::class,
-		//LaravelDoctrine\Extensions\Loggable\LoggableExtension::class,
-		//LaravelDoctrine\Extensions\Blameable\BlameableExtension::class,
-		//LaravelDoctrine\Extensions\IpTraceable\IpTraceableExtension::class,
-		//LaravelDoctrine\Extensions\Translatable\TranslatableExtension::class
+
 	],
 	/*
 	|--------------------------------------------------------------------------
@@ -176,5 +172,11 @@ return [
 	*/
 	'gedmo'                     => [
 		'all_mappings' => false
-	]
+	],
+    'metadata_drivers' => [
+        Annotations::class,
+    ],
+    'connection_factories' => [
+        'mongodb' => MongodbConnectionFactory::class
+    ]
 ];

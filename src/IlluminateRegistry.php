@@ -4,14 +4,14 @@
 namespace CImrie\ODM;
 
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use CImrie\ODM\Common\Registries\DocumentManagerRegistry;
 use Doctrine\Common\Persistence\Proxy;
 use Doctrine\ODM\MongoDB\MongoDBException;
 use Illuminate\Contracts\Container\Container;
 use CImrie\ODM\Common\Config;
 use MongoDB\Exception\InvalidArgumentException;
 
-class IlluminateRegistry implements ManagerRegistry {
+class IlluminateRegistry implements DocumentManagerRegistry {
 
 	/**
 	 * @const
@@ -126,7 +126,7 @@ class IlluminateRegistry implements ManagerRegistry {
 		$name = $name ?: $this->getDefaultConnectionName();
 
 		if (!$this->connectionExists($name)) {
-			throw new InvalidArgumentException(sprintf('Doctrine Connection named "%s" does not exist.', $name));
+			throw new InvalidArgumentException(sprintf('Doctrine Connection named "%s" does not exist.', json_encode($name)));
 		}
 
 		if (isset($this->connectionsMap[$name])) {
@@ -199,7 +199,7 @@ class IlluminateRegistry implements ManagerRegistry {
 		$name = $name ?: $this->getDefaultManagerName();
 
 		if (!$this->managerExists($name)) {
-			throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', $name));
+			throw new InvalidArgumentException(sprintf('Doctrine Manager named "%s" does not exist.', json_encode($name)));
 		}
 
 		if (isset($this->managersMap[$name])) {

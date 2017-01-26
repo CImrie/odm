@@ -4,17 +4,16 @@
 namespace CImrie\ODM;
 
 
+use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Doctrine\ODM\MongoDB\Types\Type;
 use CImrie\ODM\Common\Config;
 use CImrie\ODM\Common\ConfigurationFactory;
 use CImrie\ODM\Common\Registries\ListenerRegistry;
-use CImrie\ODM\Configuration\MetaData\MetaDataManager;
+use CImrie\ODM\Configuration\Connections\ConnectionResolver;
 use LaravelDoctrine\ORM\Configuration\Cache\CacheManager;
-use CImrie\ODM\Configuration\Connections\ConnectionManager;
-use LaravelDoctrine\ORM\Configuration\MetaData\MetaData;
 
 class DocumentManagerFactory {
 
@@ -24,14 +23,9 @@ class DocumentManagerFactory {
 	protected $configurationFactory;
 
 	/**
-	 * @var ConnectionManager
+	 * @var ConnectionResolver
 	 */
-	protected $connectionManager;
-
-	/**
-	 * @var MetaDataManager
-	 */
-	protected $metaDataManager;
+	protected $connectionResolver;
 
 	/**
 	 * @var CacheManager
@@ -43,20 +37,24 @@ class DocumentManagerFactory {
 	 */
 	protected $listenerRegistry;
 
-	public function __construct(ConfigurationFactory $configurationFactory, ConnectionManager $connectionManager, MetaDataManager $metaDataManager, CacheManager $cacheManager, ListenerRegistry $listenerRegistry)
+    /**
+     * @var MetaDataRegistry
+     */
+    protected $metadata;
+
+    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, CacheManager $cacheManager, ListenerRegistry $listenerRegistry)
 	{
 		$this->configurationFactory = $configurationFactory;
-		$this->connectionManager    = $connectionManager;
-		$this->metaDataManager      = $metaDataManager;
+		$this->connectionResolver    = $connectionResolver;
 		$this->cacheManager         = $cacheManager;
 		$this->listenerRegistry     = $listenerRegistry;
-
-	}
+        $this->metadata = $metadata;
+    }
 
 	public function create(Config $config)
 	{
 		$configuration = $this->configurationFactory->create();
-		$connection    = $this->connectionManager->driver($config->getConnectionName(), $config->getDriverResolvedConfig());
+		$connection    = $this->connectionResolver->resolve($config->getConnectionName());
 
 		/*
 		 * Database
@@ -114,14 +112,15 @@ class DocumentManagerFactory {
 
 	public function setMetadataDriver(Config $config, Configuration $configuration)
 	{
-		$metadata = $this->metaDataManager->driver($config->getSetting('meta'), $config->getSettings());
+	    $metadata = $this->metadata->get($config->getSetting('meta'));
+        $driver = $metadata->resolve($config->getSettings());
+	    $driverChain = new MappingDriverChain();
 
-		if ($metadata instanceof MetaData) {
-			$configuration->setMetadataDriverImpl($metadata->resolve($config->getSettings()));
-			$configuration->setClassMetadataFactoryName($metadata->getClassMetadataFactoryName());
-		} else {
-			$configuration->setMetadataDriverImpl($metadata);
-		}
+	    $driverChain->addDriver($driver, 'default');
+	    $driverChain->setDefaultDriver($driver);
+
+        $configuration->setMetadataDriverImpl($driverChain);
+        $configuration->setClassMetadataFactoryName($metadata->getClassMetadataFactoryName());
 	}
 
 	/**

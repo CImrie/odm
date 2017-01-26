@@ -4,26 +4,22 @@
 namespace CImrie\ODM\Configuration\MetaData;
 
 
-use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
-use LaravelDoctrine\ORM\Configuration\MetaData\MetaData;
 
-class Annotations extends MetaData {
+class Annotations extends AbstractMetadata {
 
 	public function resolve(array $settings = [])
 	{
-		$driver =(AnnotationDriver::create(array_get($settings, 'paths', [])));
+		$driver = (AnnotationDriver::create(array_get($settings, 'paths', [])));
 		AnnotationDriver::registerAnnotationClasses();
+
+		$specificClasses = array_get($settings, 'documents', []);
+        foreach($specificClasses as $specificClass)
+        {
+            $driver->loadMetadataForClass($specificClass, new ClassMetadata($specificClass));
+        }
 
 		return $driver;
 	}
-
-	/**
-	 * @return string
-	 */
-	public function getClassMetadataFactoryName()
-	{
-		return ClassMetadataFactory::class;
-	}
-
 }
