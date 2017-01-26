@@ -14,4 +14,14 @@ class One implements Reference
     {
         return $this->mapping;
     }
+
+    public function isMany()
+    {
+        return false;
+    }
+
+    public function isOne()
+    {
+        return true;
+    }
 }

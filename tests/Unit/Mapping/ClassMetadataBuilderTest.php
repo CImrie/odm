@@ -4,7 +4,7 @@ namespace Tests\Unit\Mapping;
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Mapping\ClassMetadataBuilder;
-use Tests\Unit\Models\TestUser;
+use Tests\Models\TestUser;
 use Tests\Unit\Repositories\TestRepository;
 
 /**

@@ -21,4 +21,14 @@ class Many implements Reference {
     {
         return $this->mapping;
     }
+
+    public function isMany()
+    {
+        return true;
+    }
+
+    public function isOne()
+    {
+        return false;
+    }
 }

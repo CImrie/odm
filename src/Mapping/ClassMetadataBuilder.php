@@ -4,6 +4,7 @@
 namespace CImrie\ODM\Mapping;
 
 
+use CImrie\ODM\Mapping\References\Reference as ReferenceBuilder;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Exceptions\DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException;
 
@@ -169,6 +170,22 @@ class ClassMetadataBuilder {
 		]);
 
 		return $this;
+	}
+
+    public function addReference(ReferenceBuilder $reference)
+    {
+        $mapping = $reference->asArray();
+
+        if($reference->isMany())
+        {
+            $this->cm->mapManyReference($mapping);
+        }
+        if($reference->isOne())
+        {
+            $this->cm->mapOneReference($mapping);
+        }
+
+        return $this;
 	}
 
 	public function getClassMetadata()
