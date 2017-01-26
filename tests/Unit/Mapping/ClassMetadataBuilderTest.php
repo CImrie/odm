@@ -4,7 +4,7 @@ namespace Tests\Unit\Mapping;
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Mapping\ClassMetadataBuilder;
-use Tests\Unit\Models\TestUser;
+use Tests\Models\TestUser;
 use Tests\Unit\Repositories\TestRepository;
 
 /**
@@ -29,7 +29,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 
 	public function setUp()
 	{
-		$this->cm = new ClassMetadata(\Tests\Unit\Models\TestUser::class);
+		$this->cm = new ClassMetadata(TestUser::class);
 		$this->builder = new ClassMetadataBuilder($this->cm);
 	}
 
