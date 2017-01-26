@@ -1,20 +1,21 @@
 <?php
 
+use CImrie\ODM\Configuration\Connections\MongodbConnectionFactory;
+use CImrie\ODM\Configuration\MetaData\Annotations;
+
 return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Entity Mangers
+	| Document Mangers
 	|--------------------------------------------------------------------------
 	|
-	| Configure your Entity Managers here. You can set a different connection
-	| and driver per manager and configure events and filters. Change the
-	| paths setting to the appropriate path and replace App namespace
-	| by your own namespace.
+	| Configure your Document Manager(s). You can have more than one, but
+	| keep in mind that extensions are loaded and enabled across all managers.
 	|
-	| Available meta drivers: fluent|annotations|yaml|xml|config|static_php|php
+	| Available meta driver(s): annotations
 	|
-	| Available connections: mysql|oracle|pgsql|sqlite|sqlsrv
+	| Available connection(s): mongodb
 	| (Connections can be configured in the database config)
 	|
 	| --> Warning: Proxy auto generation should only be enabled in dev!
@@ -23,14 +24,8 @@ return [
 	'managers'                  => [
 		'default' => [
 			'dev'        => env('APP_DEBUG'),
-			'meta'       => env('DOCTRINE_METADATA', 'annotations'),
+			'meta'       => env('DOCTRINE_METADATA', Annotations::class),
 			'connection' => env('DB_CONNECTION', 'mongodb'),
-			'namespaces' => [
-				'App'
-			],
-			'paths'      => [
-				base_path('app/Auth/Entities')
-			],
 			'repository' => Doctrine\ODM\MongoDB\DocumentRepository::class,
 			'proxies'    => [
 				'namespace'     => 'Proxies',
@@ -61,14 +56,11 @@ return [
 			| Doctrine mapping types
 			|--------------------------------------------------------------------------
 			|
-			| Link a Database Type to a Local Doctrine Type
-			|
-			| Using 'enum' => 'string' is the same of:
-			| $doctrineManager->extendAll(function (\Doctrine\ORM\Configuration $configuration,
-			|         \Doctrine\DBAL\Connection $connection,
-			|         \Doctrine\Common\EventManager $eventManager) {
-			|     $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-			| });
+			| Link a Database Type to a Local Doctrine Type.
+			| Due to the lack of documentation on ODM, check out the ORM references
+			| for more info. They are broadly the same.
+			| Also, check out the class "Doctrine\ODM\MongoDB\Types\Type" to see how
+			| they get loaded in (using the AddType method).
 			|
 			| References:
 			| http://doctrine-orm.readthedocs.org/en/latest/cookbook/custom-mapping-types.html
@@ -90,21 +82,14 @@ return [
 	|
 	| Enable/disable Doctrine Extensions by adding or removing them from the list
 	|
-	| If you want to require custom extensions you will have to require
-	| laravel-doctrine/extensions in your composer.json
+	| Gedmo extensions are included by default with this package as they are
+	| frequently used. Set'use_extensions' to false if you wish to disable
+	| all extension-related activity (i.e. prevent load of OdmExtensionServiceProvider)
 	|
 	*/
+	'use_extensions' => true,
 	'extensions'                => [
-		//LaravelDoctrine\ORM\Extensions\TablePrefix\TablePrefixExtension::class,
-		//LaravelDoctrine\Extensions\Timestamps\TimestampableExtension::class,
-		//LaravelDoctrine\Extensions\SoftDeletes\SoftDeleteableExtension::class,
-		//LaravelDoctrine\Extensions\Sluggable\SluggableExtension::class,
-		//LaravelDoctrine\Extensions\Sortable\SortableExtension::class,
-		//LaravelDoctrine\Extensions\Tree\TreeExtension::class,
-		//LaravelDoctrine\Extensions\Loggable\LoggableExtension::class,
-		//LaravelDoctrine\Extensions\Blameable\BlameableExtension::class,
-		//LaravelDoctrine\Extensions\IpTraceable\IpTraceableExtension::class,
-		//LaravelDoctrine\Extensions\Translatable\TranslatableExtension::class
+
 	],
 	/*
 	|--------------------------------------------------------------------------
@@ -115,36 +100,18 @@ return [
 	|--------------------------------------------------------------------------
 	*/
 	'custom_types'              => [
-		'json' => LaravelDoctrine\ORM\Types\Json::class
+	    // mytype => MyType::class
 	],
 	/*
 	|--------------------------------------------------------------------------
-	| DQL custom datetime functions
-	|--------------------------------------------------------------------------
-	*/
-	'custom_datetime_functions' => [],
-	/*
-	|--------------------------------------------------------------------------
-	| DQL custom numeric functions
-	|--------------------------------------------------------------------------
-	*/
-	'custom_numeric_functions'  => [],
-	/*
-	|--------------------------------------------------------------------------
-	| DQL custom string functions
-	|--------------------------------------------------------------------------
-	*/
-	'custom_string_functions'   => [],
-	/*
-	|--------------------------------------------------------------------------
-	| Enable query logging with laravel file logging,
-	| debugbar, clockwork or an own implementation.
-	| Setting it to false, will disable logging
+	| Enable query logging.
+	| Set to false to disable, or a class name to use a particular logger.
+	| No loggers are provided by default but can be easily done so by extending
+	| CImrie\Odm\Logging\Logger and implementing the 'log' method.
 	|
-	| Available:
-	| - LaravelDoctrine\ORM\Loggers\LaravelDebugbarLogger
-	| - LaravelDoctrine\ORM\Loggers\ClockworkLogger
-	| - LaravelDoctrine\ORM\Loggers\FileLogger
+	| See:
+	| http://docs.doctrine-project.org/projects/doctrine-mongodb-odm/en/latest/reference/logging.html
+	|
 	|--------------------------------------------------------------------------
 	*/
 	'logger'                    => env('DOCTRINE_LOGGER', false),
@@ -164,17 +131,20 @@ return [
 		'namespace'              => null,
 		'second_level'           => false,
 	],
-	/*
-	|--------------------------------------------------------------------------
-	| Gedmo extensions
-	|--------------------------------------------------------------------------
-	|
-	| Settings for Gedmo extensions
-	| If you want to use this you will have to require
-	| laravel-doctrine/extensions in your composer.json
-	|
-	*/
-	'gedmo'                     => [
-		'all_mappings' => false
-	]
+    /*
+     |------------------------------------------------------------
+     | Misc
+     |------------------------------------------------------------
+     |
+     | Any internal implementation details will be configurable here.
+     | For example, the available Metadata Drivers
+     | (so that you can implement one yourself).
+     |
+     */
+    'metadata_drivers' => [
+        Annotations::class,
+    ],
+    'connection_factories' => [
+        'mongodb' => MongodbConnectionFactory::class
+    ]
 ];

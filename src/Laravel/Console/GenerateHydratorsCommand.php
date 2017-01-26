@@ -4,7 +4,7 @@
 namespace CImrie\ODM\Laravel\Console;
 
 
-class GenerateDocumentsCommand extends ODMCommand {
+class GenerateHydratorsCommand extends ODMCommand {
 
 	protected $signature = 'odm:generate:hydrators
     {--filter=* : A string pattern used to match documents that should be processed}
