@@ -76,8 +76,13 @@ trait DefaultReferenceMappings
         return $this;
     }
 
-    public function cascade($cascade = 'all')
+    public function cascade($cascade = ['all'])
     {
+        if(!is_array($cascade))
+        {
+            $cascade = [$cascade];
+        }
+
         $this->mapping['cascade'] = $cascade;
 
         return $this;
