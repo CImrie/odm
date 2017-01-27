@@ -2,10 +2,15 @@
 
 namespace Tests\Unit\Mapping;
 
+use CImrie\ODM\Mapping\Embeds\Many;
+use CImrie\ODM\Mapping\Embeds\One;
+use CImrie\ODM\Mapping\Field;
+use CImrie\ODM\Mapping\Index;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Mapping\ClassMetadataBuilder;
 use Tests\Models\TestUser;
 use Tests\Unit\Repositories\TestRepository;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
 
 /**
  * Class ClassMetadataBuilderTest
@@ -54,15 +59,19 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 
 	public function test_can_add_embedded_document()
 	{
+	    $embed = (new One)->field('user');
+
 		$this->assertCount(0, $this->cm->getEmbeddedFieldsMappings());
-		$this->assertFluentSetter($this->builder->addEmbeddedDocument('user'));
+		$this->assertFluentSetter($this->builder->addEmbeddedDocument($embed));
 		$this->assertCount(1, $this->cm->getEmbeddedFieldsMappings());
 	}
 
 	public function test_can_add_many_embedded_documents()
 	{
+	    $embed = (new Many)->field('user')->entity(TestUser::class);
+
 		$this->assertCount(0, $this->cm->getEmbeddedFieldsMappings());
-		$this->assertFluentSetter($this->builder->addManyEmbeddedDocument('user', TestUser::class, 'prefix_'));
+		$this->assertFluentSetter($this->builder->addManyEmbeddedDocument($embed));
 		$this->assertCount(1, $this->cm->getEmbeddedFieldsMappings());
 	}
 
@@ -80,15 +89,17 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 
 	public function test_can_add_index_to_a_field()
 	{
-		$this->assertFluentSetter($this->builder->addIndex('field'));
-		$this->assertEquals(['field'], array_get($this->cm->indexes, '0.keys'));
+	    $index = (new Index)->key('field');
+
+		$this->assertFluentSetter($this->builder->addIndex($index));
+		$this->assertEquals(['field' => 1], array_get($this->cm->indexes, '0.keys'));
 		$this->assertEmpty(array_get($this->cm->indexes, '0.options'));
 	}
 
 	public function test_can_add_unique_constraint_to_a_field()
 	{
 		$this->assertFluentSetter($this->builder->addUniqueConstraint(['uniqueField', 'uniqueField2']));
-		$this->assertEquals(['uniqueField', 'uniqueField2'], array_get($this->cm->indexes, '0.keys'));
+		$this->assertEquals(['uniqueField' => 1, 'uniqueField2' => 1], array_get($this->cm->indexes, '0.keys'));
 		$this->assertContains(['unique' => true], array_get($this->cm->indexes, '0.options'));
 	}
 
@@ -144,20 +155,50 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 	 */
 	public function test_can_add_a_field_to_a_document()
 	{
-		$this->assertFluentSetter($this->builder->addField('name', 'string'));
-		$this->assertContains(['type' => 'string'], $this->cm->getFieldMapping('name'));
+	    $field = (new Field())
+                ->name('name')
+                ->type('string')
+                ->nullable()
+                ->columnName('customName')
+            ;
+
+		$this->assertFluentSetter($this->builder->addField($field));
+		$this->assertContains(['type' => 'string', 'name' => 'customName'], $this->cm->getFieldMapping('name'));
+		$this->assertEquals('customName', $this->cm->getFieldMapping('name')['name']);
+		$this->assertTrue($this->cm->getFieldMapping('name')['nullable']);
 	}
 
-//	/**
-//	 * @todo may need to test each type of reference depending on the reference builder
-//	 */
-//	public function test_can_add_references_to_other_documents()
-//	{
-////		$this->assertFluentSetter($this->builder->)
-//	}
+    public function test_can_add_also_load_to_a_field()
+    {
+        $field = (new Field())
+                ->name('name')
+                ->alsoLoad('customLoadField')
+            ;
+
+        $this->assertFluentSetter($this->builder->addField($field));
+        $this->assertEquals(['customLoadField'], $this->cm->getFieldMapping('name')['alsoLoadFields']);
+	}
 
 	private function assertFluentSetter($builder)
 	{
 		$this->assertInstanceOf(ClassMetadataBuilder::class, $builder);
 	}
+}
+
+/**
+ * Class TestAlsoLoadEntity
+ * @package Tests\Unit\Mapping
+ * @Odm\Document
+ */
+class TestAlsoLoadEntity {
+
+    /**
+     * @Odm\Id
+     */
+    protected $id;
+
+    /**
+     * @Odm\Field('type'='string') @Odm\AlsoLoad('fullName')
+     */
+    protected $name;
 }

@@ -4,192 +4,216 @@
 namespace CImrie\ODM\Mapping;
 
 
+use CImrie\ODM\Mapping\Embeds\Many;
+use CImrie\ODM\Mapping\Embeds\One;
 use CImrie\ODM\Mapping\References\Reference as ReferenceBuilder;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Exceptions\DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException;
 
-class ClassMetadataBuilder {
+class ClassMetadataBuilder
+{
 
-	protected $cm;
+    protected $cm;
 
-	public function __construct(ClassMetadata $classMetadata)
-	{
-		$this->cm = $classMetadata;
-	}
+    public function __construct(ClassMetadata $classMetadata)
+    {
+        $this->cm = $classMetadata;
+    }
 
-	public function setMappedSuperclass()
-	{
-		$this->cm->isMappedSuperclass = true;
-		$this->cm->isEmbeddedDocument = false;
+    public function setMappedSuperclass()
+    {
+        $this->cm->isMappedSuperclass = true;
+        $this->cm->isEmbeddedDocument = false;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setEmbedded()
-	{
-		$this->cm->isMappedSuperclass = false;
-		$this->cm->isEmbeddedDocument = true;
+    public function setEmbedded()
+    {
+        $this->cm->isMappedSuperclass = false;
+        $this->cm->isEmbeddedDocument = true;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function addEmbeddedDocument($field, $class = null, $prefix = null)
-	{
-		$this->cm->mapOneEmbedded(
-			[
-				'fieldName'    => $field,
-				'class'        => $class,
-				'columnPrefix' => $prefix,
-			]
-		);
+    public function addEmbeddedDocument(One $embed)
+    {
+        $this->cm->mapOneEmbedded($embed->asArray());
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function addManyEmbeddedDocument($field, $class = null, $prefix = null)
-	{
-		$this->cm->mapManyEmbedded(
-			[
-				'fieldName'    => $field,
-				'class'        => $class,
-				'columnPrefix' => $prefix,
-			]
-		);
+    public function addManyEmbeddedDocument(Many $embed)
+    {
+        $this->cm->mapManyEmbedded($embed->asArray());
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setCustomRepository($class)
-	{
-		$this->cm->setCustomRepositoryClass($class);
+    public function setCustomRepository($class)
+    {
+        $this->cm->setCustomRepositoryClass($class);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setCollectionName($name)
-	{
-		$this->cm->setCollection($name);
+    public function setCollectionName($name)
+    {
+        $this->cm->setCollection($name);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function addIndex($fields, array $options = [])
-	{
-		if( ! is_array($fields))
-		{
-			$fields = [$fields];
-		}
+    public function addIndex(Index $index)
+    {
+        $this->cm->addIndex($index->getKeys(), $index->getOptions());
 
-		$this->cm->addIndex($fields, $options);
+        return $this;
+    }
 
-		return $this;
-	}
+    public function addUniqueConstraint($fields)
+    {
+        if(!is_array($fields))
+        {
+            $fields = [$fields];
+        }
 
-	public function addUniqueConstraint($fields)
-	{
-		$this->addIndex($fields,
-			[
-				'unique' => true,
-			]
-		);
+        $index = new Index();
+        $index
+            ->unique();
 
-		return $this;
-	}
+        foreach($fields as $field)
+        {
+            $index->key($field);
+        }
 
-	public function enableCollectionPerClassInheritance()
-	{
-		$this->cm->inheritanceType = ClassMetadata::INHERITANCE_TYPE_COLLECTION_PER_CLASS;
+        $this->addIndex($index);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function enableSingleCollectionInheritance()
-	{
-		$this->cm->inheritanceType = ClassMetadata::INHERITANCE_TYPE_SINGLE_COLLECTION;
+    public function setWriteConcern($writeConcern)
+    {
+        $this->cm->setWriteConcern($writeConcern);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setDiscriminatorField($field)
-	{
-		if( ! $this->cm->isInheritanceTypeSingleCollection())
-		{
-			throw new DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException($this->cm->reflClass->getName());
-		}
+    public function enableCollectionPerClassInheritance()
+    {
+        $this->cm->inheritanceType = ClassMetadata::INHERITANCE_TYPE_COLLECTION_PER_CLASS;
 
-		$this->cm->discriminatorField = $field;
+        return $this;
+    }
 
-		return $this;
-	}
+    public function enableSingleCollectionInheritance()
+    {
+        $this->cm->inheritanceType = ClassMetadata::INHERITANCE_TYPE_SINGLE_COLLECTION;
 
-	public function addDiscriminatorMapping($alias, $class)
-	{
-		$this->cm->discriminatorMap[$alias] = $class;
+        return $this;
+    }
 
-		return $this;
-	}
+    public function setDiscriminatorField($field)
+    {
+        if (!$this->cm->isInheritanceTypeSingleCollection()) {
+            throw new DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException($this->cm->reflClass->getName());
+        }
 
-	public function setExplicitChangeTracking()
-	{
-		$this->cm->changeTrackingPolicy = ClassMetadata::CHANGETRACKING_DEFERRED_EXPLICIT;
+        $this->cm->discriminatorField = $field;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setImplicitChangeTracking()
-	{
-		$this->cm->changeTrackingPolicy = ClassMetadata::CHANGETRACKING_DEFERRED_IMPLICIT;
+    public function addDiscriminatorMapping($alias, $class)
+    {
+        $this->cm->discriminatorMap[$alias] = $class;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setNotifyChangeTracking()
-	{
-		$this->cm->changeTrackingPolicy = ClassMetadata::CHANGETRACKING_NOTIFY;
+    public function setDefaultDiscriminatorKey($key)
+    {
+        $this->cm->defaultDiscriminatorValue = $key;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function addLifecycleEventListener($event, $method = null)
-	{
-		if( ! $method)
-		{
-			$method = $event;
-		}
+    public function setExplicitChangeTracking()
+    {
+        $this->cm->changeTrackingPolicy = ClassMetadata::CHANGETRACKING_DEFERRED_EXPLICIT;
 
-		$this->cm->addLifecycleCallback($method, $event);
+        return $this;
+    }
 
-		return $this;
-	}
+    public function setImplicitChangeTracking()
+    {
+        $this->cm->changeTrackingPolicy = ClassMetadata::CHANGETRACKING_DEFERRED_IMPLICIT;
 
-	public function addField($fieldName, $type)
-	{
-		$this->cm->mapField([
-			'fieldName' => $fieldName,
-			'type'      => $type,
-		]);
+        return $this;
+    }
 
-		return $this;
-	}
+    public function setNotifyChangeTracking()
+    {
+        $this->cm->changeTrackingPolicy = ClassMetadata::CHANGETRACKING_NOTIFY;
+
+        return $this;
+    }
+
+    public function addLifecycleEventListener($event, $method = null)
+    {
+        if (!$method) {
+            $method = $event;
+        }
+
+        $this->cm->addLifecycleCallback($method, $event);
+
+        return $this;
+    }
+
+    public function addField(Builder $fieldBuilder)
+    {
+        $this->cm->mapField($fieldBuilder->asArray());
+
+        return $this;
+    }
 
     public function addReference(ReferenceBuilder $reference)
     {
         $mapping = $reference->asArray();
 
-        if($reference->isMany())
-        {
+        if ($reference->isMany()) {
             $this->cm->mapManyReference($mapping);
         }
-        if($reference->isOne())
-        {
+        if ($reference->isOne()) {
             $this->cm->mapOneReference($mapping);
         }
 
         return $this;
-	}
+    }
 
-	public function getClassMetadata()
-	{
-		return $this->cm;
-	}
+    public function setShardKey(array $keys, array $options)
+    {
+        $this->cm->setShardKey($keys, $options);
+
+        return $this;
+    }
+
+    public function version($shouldUseVersions = true)
+    {
+        $this->cm->setVersioned($shouldUseVersions);
+
+        return $this;
+    }
+
+    public function setSlaveOkay($isOkay = true)
+    {
+        $this->cm->setSlaveOkay($isOkay);
+
+        return $this;
+    }
+
+    public function getClassMetadata()
+    {
+        return $this->cm;
+    }
 }

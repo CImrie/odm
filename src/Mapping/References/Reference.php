@@ -4,15 +4,9 @@
 namespace CImrie\ODM\Mapping\References;
 
 
-interface Reference {
+use CImrie\ODM\Mapping\Builder;
 
-	/**
-	 * Returns an array representation of the reference
-	 * ready for inclusion in the Class Metadata
-	 *
-	 * @return array
-	 */
-	public function asArray();
+interface Reference extends Builder {
 
     /**
      * Check if the reference is for an x-To-Many relationship
