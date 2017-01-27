@@ -35,7 +35,7 @@ return [
 			'hydrators' => [
 				'namespace' => 'Hydrators',
 				'path' => storage_path('hydrators'),
-				'auto_generate' => env('DOCTRINE_HYDRATOR_AUTOGENERATE', false)
+				'auto_generate' => env('DOCTRINE_HYDRATOR_AUTOGENERATE', true)
 			],
 			/*
 			|--------------------------------------------------------------------------

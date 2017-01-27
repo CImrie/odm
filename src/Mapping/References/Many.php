@@ -4,18 +4,16 @@
 namespace CImrie\ODM\Mapping\References;
 
 
+use CImrie\ODM\Mapping\Traits\Collection;
+use CImrie\ODM\Mapping\Traits\DiscriminatorMap;
+
 class Many implements Reference {
 
     use DefaultReferenceMappings,
-        ComplexReferenceMappings
+        ComplexReferenceMappings,
+        DiscriminatorMap,
+        Collection
     ;
-
-    public function discriminateUsing(array $map)
-    {
-        $this->mapping['discriminatorMap'] = $map;
-
-        return $this;
-    }
 
     public function asArray()
     {

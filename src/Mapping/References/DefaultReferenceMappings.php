@@ -75,4 +75,18 @@ trait DefaultReferenceMappings
 
         return $this;
     }
+
+    public function cascade($cascade = 'all')
+    {
+        $this->mapping['cascade'] = $cascade;
+
+        return $this;
+    }
+
+    public function repositoryMethod($method)
+    {
+        $this->mapping['repositoryMethod'] = $method;
+
+        return $this;
+    }
 }

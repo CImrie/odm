@@ -6,37 +6,44 @@ namespace CImrie\ODM\Mapping\References;
 
 trait ComplexReferenceMappings
 {
-    public function criteria(array $criteria = [])
+    /**
+     * Add a sort to the reference.
+     * Call multiple times to chain sorts.
+     *
+     * @param $sortBy
+     * @param $order
+     * @return $this
+     */
+    public function sort($sortBy, $order)
     {
-        $this->mapping['criteria'] = $criteria;
+        $this->mapping['sort'][$sortBy] = $order;
 
         return $this;
     }
 
-    public function repositoryMethod($method)
+    public function criteria(array $criteria)
     {
-        $this->mapping['repositoryMethod'] = $method;
+        $originalCriteria = [];
+        if(isset($this->mapping['criteria']))
+        {
+            $originalCriteria = $this->mapping['criteria'];
+        }
+
+        $this->mapping['criteria'] = array_merge($originalCriteria, $criteria);
 
         return $this;
     }
 
-    public function sort(array $map)
+    public function limit($count)
     {
-        $this->mapping['sort'] = $map;
+        $this->mapping['limit'] = $count;
 
         return $this;
     }
 
-    public function skip($offset)
+    public function skip($count)
     {
-        $this->mapping['offset'] = $offset;
-
-        return $this;
-    }
-
-    public function limit($limit = 1)
-    {
-        $this->mapping['limit'] = $limit;
+        $this->mapping['skip'] = $count;
 
         return $this;
     }
