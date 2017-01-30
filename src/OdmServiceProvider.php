@@ -9,7 +9,6 @@ use CImrie\ODM\Configuration\Connections\ConnectionFactory;
 use CImrie\ODM\Configuration\Connections\ConnectionResolver;
 use CImrie\ODM\Configuration\MetaData\Metadata;
 use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
-use CImrie\ODM\Extensions\ExtensionManager;
 use CImrie\ODM\Laravel\Traits\OdmConfig;
 use CImrie\ODM\Logging\Loggable;
 use CImrie\ODM\Logging\Logger;
@@ -127,7 +126,7 @@ class OdmServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(DocumentManagerRegistry::class, ManagerRegistry::class);
-        $this->app->alias(DocumentManagerRegistry::class, IlluminateRegistry::class);
+        $this->app->alias(DocumentManagerRegistry::class, LaravelManagerRegistry::class);
         $this->app->alias(DocumentManagerRegistry::class, 'dm-registry');
 
     }
@@ -135,7 +134,7 @@ class OdmServiceProvider extends ServiceProvider
     public function registerDefaultDocumentManager()
     {
         // Bind the default Document Manager
-        $this->app->singleton(DocumentManager::class, function ($app) {
+        $this->app->singleton(DocumentManager::class, function (Container $app) {
             return $app->make(DocumentManagerRegistry::class)->getManager();
         });
 

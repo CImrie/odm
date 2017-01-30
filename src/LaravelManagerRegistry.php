@@ -6,6 +6,7 @@ namespace CImrie\ODM;
 
 use CImrie\ODM\Common\Config;
 use CImrie\ODM\Common\Registries\DocumentManagerRegistry;
+use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\MongoDBException;
 use Doctrine\ODM\MongoDB\Proxy\Proxy;
@@ -19,14 +20,29 @@ class LaravelManagerRegistry implements DocumentManagerRegistry
      */
     protected $managers = [];
 
+    /**
+     * @var DocumentManager[]
+     */
     protected $resolvedManagers = [];
 
+    /**
+     * @var string
+     */
     protected $defaultManagerName = 'default';
 
+    /**
+     * @var array
+     */
     protected $connections = [];
 
+    /**
+     * @var Connection[]
+     */
     protected $resolvedConnections = [];
 
+    /**
+     * @var string
+     */
     protected $defaultConnectionName = 'default';
 
     /**
