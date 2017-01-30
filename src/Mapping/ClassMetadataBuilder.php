@@ -140,7 +140,7 @@ class ClassMetadataBuilder
 
         if(isset($mapping['defaultDiscriminatorValue']))
         {
-            $this->cm->setDiscriminatorValue($mapping['defaultDiscriminatorValue']);
+            $this->cm->setDefaultDiscriminatorValue($mapping['defaultDiscriminatorValue']);
         }
 
         return $this;
