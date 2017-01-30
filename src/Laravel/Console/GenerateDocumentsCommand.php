@@ -4,7 +4,7 @@
 namespace CImrie\ODM\Laravel\Console;
 
 
-class GenerateDocumentsCommand extends ODMCommand {
+class GenerateDocumentsCommand extends OdmCommand {
 
 	protected $signature = 'odm:generate:documents
     {dest-path? : Path you want entities to be generated in }

@@ -6,6 +6,8 @@ namespace CImrie\Odm\Tests\Laravel;
 
 use CImrie\ODM\Configuration\MetaData\Annotations;
 use CImrie\ODM\Extensions\Timestampable\TimestampableExtension;
+use CImrie\ODM\Logging\Loggable;
+use CImrie\ODM\Logging\Logger;
 use CImrie\ODM\OdmServiceProvider;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -43,19 +45,23 @@ class DocumentManagerTest extends TestCase
         $this->assertInstanceOf(TimestampableListener::class, array_first($eventListeners));
     }
 
-//    public function test_can_load_specific_documents_into_mapping_driver()
-//    {
+    /**
+     * @test
+     */
+    public function can_load_logger()
+    {
 //        $this->load();
-//        $config = (object) $this->app->make('config')->get('odm');
-//
-//        $config->managers['default']['documents'] = [SpecificEntity::class];
-//        $config->metadata_drivers = [Annotations::class];
-//
-//        $this->app->make('config')->set('odm', (array) $config);
-//
-////        dd($this->dm->getClassMetadata(SpecificEntity::class));
-////        dd($this->dm->getConfiguration()->getMetadataDriverImpl()->getAllClassNames());
-//    }
+
+        /** @var OdmServiceProvider $provider */
+        $this->app->register(OdmServiceProvider::class);
+        $provider = $this->app->getProvider(OdmServiceProvider::class);
+        $this->app->make('config')->set('odm.logger', ExampleLogger::class);
+        $provider->register();
+
+        $this->dm = $this->app->make(DocumentManager::class);
+
+        $this->assertInstanceOf(\Closure::class, $this->dm->getConfiguration()->getLoggerCallable());
+    }
 }
 
 /**
@@ -69,4 +75,13 @@ class SpecificEntity {
      * @Odm\Id
      */
     protected $id;
+}
+
+class ExampleLogger extends Logger {
+
+    public function log(array $log)
+    {
+        return 'logged!';
+    }
+
 }

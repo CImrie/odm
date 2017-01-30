@@ -9,7 +9,7 @@ use Doctrine\ODM\MongoDB\Tools\Console\Helper\DocumentManagerHelper;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 
-class ODMCommand extends Command {
+abstract class OdmCommand extends Command {
 
 	/**
 	 * @var ManagerRegistry

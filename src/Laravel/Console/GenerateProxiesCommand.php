@@ -4,7 +4,7 @@
 namespace CImrie\ODM\Laravel\Console;
 
 
-class GenerateProxiesCommand extends ODMCommand {
+class GenerateProxiesCommand extends OdmCommand {
 
 	protected $signature = 'odm:generate:proxies
     {--filter=* : A string pattern used to match documents that should be processed}

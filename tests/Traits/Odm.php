@@ -29,10 +29,13 @@ trait Odm
         ]);
     }
 
-    protected function load()
+    protected function load($withDocumentManager = true)
     {
         $this->app->register(OdmServiceProvider::class);
-        $this->dm = $this->app->make(DocumentManager::class);
+        if($withDocumentManager)
+        {
+            $this->dm = $this->app->make(DocumentManager::class);
+        }
     }
 
     protected function setExtensions(array $extensions)

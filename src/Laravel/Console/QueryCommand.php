@@ -4,7 +4,7 @@
 namespace CImrie\ODM\Laravel\Console;
 
 
-class QueryCommand extends ODMCommand {
+class QueryCommand extends OdmCommand {
 
 	protected $signature = 'odm:query 
 	{class : The class of the entity to be queried.}

@@ -6,7 +6,7 @@ namespace CImrie\ODM\Laravel\Console;
 
 use Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\DropCommand;
 
-class DropSchemaCommand extends ODMCommand {
+class DropSchemaCommand extends OdmCommand {
 
 	protected $signature = 'odm:schema:drop
 	{--dm= : Drop schema for specific document manager}

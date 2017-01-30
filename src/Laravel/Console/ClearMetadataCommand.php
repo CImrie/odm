@@ -6,7 +6,7 @@ namespace CImrie\ODM\Laravel\Console;
 
 use Doctrine\ODM\MongoDB\Tools\Console\Command\ClearCache\MetadataCommand;
 
-class ClearMetadataCommand extends ODMCommand {
+class ClearMetadataCommand extends OdmCommand {
 
 	protected $signature = 'odm:clear-cache:metadata
 	{--dm= : Clear cache for a specific document manager }

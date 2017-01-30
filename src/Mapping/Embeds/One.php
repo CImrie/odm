@@ -26,10 +26,4 @@ class One implements Builder
 
         return $this;
     }
-
-    public function asArray()
-    {
-        return $this->mapping;
-    }
-
 }

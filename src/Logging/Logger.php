@@ -4,7 +4,7 @@
 namespace CImrie\ODM\Logging;
 
 
-abstract class Logger
+abstract class Logger implements Loggable
 {
     /**
      * Should return a closure that can be called to log something

@@ -6,6 +6,7 @@ namespace CImrie\ODM\Mapping\References;
 
 use CImrie\ODM\Mapping\Traits\Collection;
 use CImrie\ODM\Mapping\Traits\DiscriminatorMap;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
 
 class Many implements Reference {
 
@@ -14,11 +15,6 @@ class Many implements Reference {
         DiscriminatorMap,
         Collection
     ;
-
-    public function asArray()
-    {
-        return $this->mapping;
-    }
 
     public function isMany()
     {
@@ -29,4 +25,10 @@ class Many implements Reference {
     {
         return false;
     }
+
+    public function commit(ClassMetadataInfo $classMetadata)
+    {
+        return $classMetadata->mapOneReference($this->asArray());
+    }
+
 }

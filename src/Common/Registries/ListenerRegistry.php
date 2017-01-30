@@ -28,6 +28,7 @@ class ListenerRegistry {
 
 	/**
 	 * @param array $listeners
+     * @return $this
 	 */
 	public function addListeners(array $listeners)
 	{
@@ -35,33 +36,44 @@ class ListenerRegistry {
 		{
 			$this->addListener($listener);
 		}
+
+		return $this;
 	}
 
-	/**
-	 * @param $listener
-	 */
+    /**
+     * @param $listener
+     * @return $this
+     */
 	public function addListener($listener)
 	{
 		$this->listeners[get_class($listener)] = $listener;
+
+		return $this;
 	}
 
-	/**
-	 * @param array $subscribers
-	 */
+    /**
+     * @param EventSubscriber[] $subscribers
+     * @return $this
+     */
 	public function addSubscribers(array $subscribers)
 	{
 		foreach($subscribers as $subscriber)
 		{
 			$this->addSubscriber($subscriber);
 		}
+
+		return $this;
 	}
 
-	/**
-	 * @param EventSubscriber $subscriber
-	 */
+    /**
+     * @param EventSubscriber $subscriber
+     * @return $this
+     */
 	public function addSubscriber(EventSubscriber $subscriber)
 	{
 		$this->subscribers[get_class($subscriber)] = $subscriber;
+
+		return $this;
 	}
 
 	/**
@@ -73,7 +85,7 @@ class ListenerRegistry {
 	}
 
 	/**
-	 * @return array
+	 * @return EventSubscriber[]
 	 */
 	public function getSubscribers()
 	{

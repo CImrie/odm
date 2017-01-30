@@ -5,7 +5,7 @@ namespace CImrie\ODM;
 
 
 use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
-use CImrie\ODM\Logging\Logger;
+use CImrie\ODM\Logging\Loggable;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ODM\MongoDB\Configuration;
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -44,11 +44,11 @@ class DocumentManagerFactory {
     protected $metadata;
 
     /**
-     * @var Logger | null
+     * @var Loggable | null
      */
     protected $logger;
 
-    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, CacheManager $cacheManager = null, ListenerRegistry $listenerRegistry, Logger $logger = null)
+    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, CacheManager $cacheManager = null, ListenerRegistry $listenerRegistry, Loggable $logger = null)
 	{
 		$this->configurationFactory = $configurationFactory;
 		$this->connectionResolver    = $connectionResolver;

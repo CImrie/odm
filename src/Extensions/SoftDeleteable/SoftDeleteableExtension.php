@@ -11,6 +11,9 @@ use Gedmo\SoftDeleteable\SoftDeleteableListener;
 
 class SoftDeleteableExtension implements Extension
 {
+    /**
+     * @param DocumentManager $manager
+     */
     public function register(DocumentManager $manager)
     {
         $subscriber = new SoftDeleteableListener();

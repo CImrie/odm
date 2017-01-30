@@ -7,13 +7,23 @@ namespace CImrie\ODM\Mapping;
 use CImrie\ODM\Mapping\Embeds\Many;
 use CImrie\ODM\Mapping\Embeds\One;
 use CImrie\ODM\Mapping\References\Reference as ReferenceBuilder;
+use CImrie\ODM\Mapping\Traits\DiscriminatorMap;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Exceptions\DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException;
 
 class ClassMetadataBuilder
 {
+    use DiscriminatorMap;
 
+    /**
+     * @var ClassMetadata
+     */
     protected $cm;
+
+    /**
+     * @var array
+     */
+    protected $mapping = [];
 
     public function __construct(ClassMetadata $classMetadata)
     {
@@ -113,27 +123,25 @@ class ClassMetadataBuilder
         return $this;
     }
 
-    public function setDiscriminatorField($field)
+    public function setDiscriminator(Discriminator $discriminator)
     {
-        if (!$this->cm->isInheritanceTypeSingleCollection()) {
-            throw new DiscriminatorFieldCanOnlyBeSetForSingleCollectionInheritanceException($this->cm->reflClass->getName());
+        $mapping = $discriminator->asArray();
+        $this->discriminator = $discriminator;
+
+        if(isset($mapping['discriminatorField']))
+        {
+            $this->cm->setDiscriminatorField($mapping['discriminatorField']);
         }
 
-        $this->cm->discriminatorField = $field;
+        if(isset($mapping['discriminatorMap']))
+        {
+            $this->cm->setDiscriminatorMap($mapping['discriminatorMap']);
+        }
 
-        return $this;
-    }
-
-    public function addDiscriminatorMapping($alias, $class)
-    {
-        $this->cm->discriminatorMap[$alias] = $class;
-
-        return $this;
-    }
-
-    public function setDefaultDiscriminatorKey($key)
-    {
-        $this->cm->defaultDiscriminatorValue = $key;
+        if(isset($mapping['defaultDiscriminatorValue']))
+        {
+            $this->cm->setDiscriminatorValue($mapping['defaultDiscriminatorValue']);
+        }
 
         return $this;
     }
@@ -179,14 +187,7 @@ class ClassMetadataBuilder
 
     public function addReference(ReferenceBuilder $reference)
     {
-        $mapping = $reference->asArray();
-
-        if ($reference->isMany()) {
-            $this->cm->mapManyReference($mapping);
-        }
-        if ($reference->isOne()) {
-            $this->cm->mapOneReference($mapping);
-        }
+        $reference->commit($this->cm);
 
         return $this;
     }

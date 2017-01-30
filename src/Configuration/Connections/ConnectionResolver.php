@@ -13,6 +13,9 @@ class ConnectionResolver {
      */
     protected $factories;
 
+    /**
+     * @var array
+     */
     protected $databaseConfigs;
 
     public function __construct(array $factories, array $config)

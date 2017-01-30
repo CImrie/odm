@@ -6,7 +6,7 @@ namespace CImrie\ODM\Laravel\Console;
 
 use Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\UpdateCommand;
 
-class UpdateSchemaCommand extends ODMCommand {
+class UpdateSchemaCommand extends OdmCommand {
 
 	protected $signature = 'odm:schema:update
 	{--dm= : Update schema for specific document manager}

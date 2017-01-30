@@ -6,7 +6,7 @@ namespace CImrie\ODM\Laravel\Console;
 
 use Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\CreateCommand;
 
-class CreateSchemaCommand extends ODMCommand {
+class CreateSchemaCommand extends OdmCommand {
 
 	protected $signature = 'odm:schema:create
 	{--dm= : Create schema for specific document manager}

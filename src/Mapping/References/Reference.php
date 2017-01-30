@@ -5,6 +5,7 @@ namespace CImrie\ODM\Mapping\References;
 
 
 use CImrie\ODM\Mapping\Builder;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
 
 interface Reference extends Builder {
 
@@ -21,4 +22,12 @@ interface Reference extends Builder {
      * @return mixed
      */
 	public function isOne();
+
+    /**
+     * Store and save the reference in the metadata.
+     *
+     * @param ClassMetadataInfo $classMetadata
+     * @return mixed
+     */
+    public function commit(ClassMetadataInfo $classMetadata);
 }
