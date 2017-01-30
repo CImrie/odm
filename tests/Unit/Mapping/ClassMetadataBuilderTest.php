@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Mapping;
+namespace CImrie\Odm\Tests\Unit\Mapping;
 
 use CImrie\ODM\Mapping\Embeds\Many;
 use CImrie\ODM\Mapping\Embeds\One;
@@ -8,8 +8,8 @@ use CImrie\ODM\Mapping\Field;
 use CImrie\ODM\Mapping\Index;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Mapping\ClassMetadataBuilder;
-use Tests\Models\TestUser;
-use Tests\Unit\Repositories\TestRepository;
+use CImrie\Odm\Tests\Models\TestUser;
+use CImrie\Odm\Tests\Unit\Repositories\TestRepository;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
 
 /**

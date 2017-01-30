@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Configuration;
+namespace CImrie\Odm\Tests\Unit\Configuration;
 
 use Doctrine\ODM\MongoDB\Configuration;
 use CImrie\ODM\Configuration\OdmConfigurationFactory;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Laravel;
+namespace CImrie\Odm\Tests\Laravel;
 
 
 use CImrie\ODM\Configuration\MetaData\Annotations;
@@ -10,10 +10,11 @@ use CImrie\ODM\OdmServiceProvider;
 use Doctrine\MongoDB\Connection;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Gedmo\Timestampable\TimestampableListener;
-use Tests\Traits\Odm as OdmTrait;
+use Tests\TestCase;
+use CImrie\Odm\Tests\Traits\Odm as OdmTrait;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
 
-class DocumentManagerTest extends \TestCase
+class DocumentManagerTest extends TestCase
 {
     use OdmTrait;
 

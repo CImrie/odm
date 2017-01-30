@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Traits;
+namespace CImrie\Odm\Tests\Traits;
 
 
 use CImrie\ODM\OdmServiceProvider;

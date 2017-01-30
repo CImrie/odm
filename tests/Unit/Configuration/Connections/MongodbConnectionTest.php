@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Configuration\Connections;
+namespace CImrie\Odm\Tests\Unit\Configuration\Connections;
 
 use Doctrine\MongoDB\Connection;
 use Illuminate\Contracts\Config\Repository;

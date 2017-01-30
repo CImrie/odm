@@ -1,17 +1,18 @@
 <?php
 
 
-namespace Tests\Laravel\Extensions;
+namespace CImrie\Odm\Tests\Laravel\Extensions;
 
 
 use CImrie\ODM\Extensions\SoftDeleteable\SoftDeleteableExtension;
 use CImrie\ODM\Testing\Traits\DatabaseResets;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableDocument;
-use Tests\Traits\Odm as OdmTrait;
+use CImrie\Odm\Tests\Traits\Odm as OdmTrait;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Tests\TestCase;
 
-class SoftDeleteableExtensionTest extends \TestCase
+class SoftDeleteableExtensionTest extends TestCase
 {
     use OdmTrait, DatabaseResets;
 

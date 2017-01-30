@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Unit\Repositories;
+namespace CImrie\Odm\Tests\Unit\Repositories;
 
 
 class TestRepository {

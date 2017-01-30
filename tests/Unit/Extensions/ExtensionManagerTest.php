@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Unit\Extensions;
+namespace CImrie\Odm\Tests\Unit\Extensions;
 
 
 use CImrie\ODM\Extensions\ExtensionManager;

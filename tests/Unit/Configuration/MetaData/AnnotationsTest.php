@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Configuration\MetaData;
+namespace CImrie\Odm\Tests\Unit\Configuration\MetaData;
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataFactory;
 use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;

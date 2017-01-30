@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Tests\Mapping;
+namespace CImrie\Odm\Tests\Mapping;
 
 
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo;
-use Tests\Models\Profile;
-use Tests\Models\TestUser;
+use CImrie\Odm\Tests\Models\Profile;
+use CImrie\Odm\Tests\Models\TestUser;
 use CImrie\ODM\Mapping\Reference;
 
 class ReferenceBuilderTest extends \PHPUnit_Framework_TestCase

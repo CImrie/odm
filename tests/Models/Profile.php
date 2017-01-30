@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Models;
+namespace CImrie\Odm\Tests\Models;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as ODM;
 

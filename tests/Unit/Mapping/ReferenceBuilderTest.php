@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Unit\Mapping;
+namespace CImrie\Odm\Tests\Unit\Mapping;
 
 
 use CImrie\ODM\Mapping\Reference;

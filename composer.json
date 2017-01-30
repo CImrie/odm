@@ -41,11 +41,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests"
+            "CImrie\\Odm\\Tests\\": "tests",
+            "Tests\\": "vendor/laravel/laravel/tests"
         },
         "classmap": [
-            "tests",
-            "vendor/laravel/laravel/tests"
+            "tests"
         ]
     }
 }
