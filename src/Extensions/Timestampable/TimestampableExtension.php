@@ -10,6 +10,9 @@ use Gedmo\Timestampable\TimestampableListener;
 
 class TimestampableExtension implements Extension
 {
+    /**
+     * @param DocumentManager $manager
+     */
     public function register(DocumentManager $manager)
     {
         $subscriber = new TimestampableListener();

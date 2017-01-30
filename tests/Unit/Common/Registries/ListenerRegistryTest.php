@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Common\Registries;
+namespace CImrie\Odm\Tests\Unit\Common\Registries;
 
 
 use Doctrine\Common\EventSubscriber;

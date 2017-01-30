@@ -10,6 +10,9 @@ use Gedmo\ReferenceIntegrity\ReferenceIntegrityListener;
 
 class ReferenceIntegrityExtension implements Extension
 {
+    /**
+     * @param DocumentManager $manager
+     */
     public function register(DocumentManager $manager)
     {
         $subscriber = new ReferenceIntegrityListener();

@@ -5,13 +5,23 @@ namespace CImrie\ODM\Configuration\Connections;
 
 
 
+use Doctrine\MongoDB\Connection;
+
 class MongodbConnectionFactory implements ConnectionFactory {
 
+    /**
+     * @param array $settings
+     * @return Connection
+     */
 	public function build(array $settings = [])
 	{
-		return new \Doctrine\MongoDB\Connection($this->buildConnectionString($settings));
+		return new Connection($this->buildConnectionString($settings));
 	}
 
+    /**
+     * @param array $settings
+     * @return string
+     */
 	private function buildConnectionString(array $settings = [])
 	{
 		$connectionString = "";

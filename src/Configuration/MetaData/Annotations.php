@@ -9,6 +9,10 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 
 class Annotations extends AbstractMetadata {
 
+    /**
+     * @param array $settings
+     * @return AnnotationDriver
+     */
 	public function resolve(array $settings = [])
 	{
 		$driver = (AnnotationDriver::create(array_get($settings, 'paths', [])));

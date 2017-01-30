@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Mapping;
+namespace CImrie\Odm\Tests\Unit\Mapping;
 
 use CImrie\ODM\Mapping\Embeds\Many;
 use CImrie\ODM\Mapping\Embeds\One;
@@ -8,8 +8,8 @@ use CImrie\ODM\Mapping\Field;
 use CImrie\ODM\Mapping\Index;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Mapping\ClassMetadataBuilder;
-use Tests\Models\TestUser;
-use Tests\Unit\Repositories\TestRepository;
+use CImrie\Odm\Tests\Models\TestUser;
+use CImrie\Odm\Tests\Unit\Repositories\TestRepository;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
 
 /**
@@ -103,10 +103,20 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 		$this->assertContains(['unique' => true], array_get($this->cm->indexes, '0.options'));
 	}
 
+	/**
+	 * @test
+	 */
+	public function can_add_unique_constraint_to_one_field()
+	{
+	    $this->assertFluentSetter($this->builder->addUniqueConstraint('uniqueField'));
+	    $this->assertEquals(['uniqueField' => 1], array_get($this->cm->indexes, '0.keys'));
+	}
+
 	public function test_can_set_inheritance_to_collection_per_class()
 	{
 		$this->assertFluentSetter($this->builder->enableCollectionPerClassInheritance());
 		$this->assertTrue($this->cm->isInheritanceTypeCollectionPerClass());
+
 		$this->assertFalse($this->cm->isInheritanceTypeSingleCollection());
 		$this->assertFalse($this->cm->isInheritanceTypeNone());
 	}
@@ -122,13 +132,33 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 	public function test_can_set_discriminator_field()
 	{
 		$this->assertFluentSetter($this->builder->enableSingleCollectionInheritance());
-		$this->assertFluentSetter($this->builder->setDiscriminatorField('custom_type'));
+		$this->assertFluentSetter($this->builder->setDiscriminator(
+            $this->builder->discriminate()->field('custom_type')
+        ));
+
 		$this->assertEquals('custom_type', $this->cm->discriminatorField);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_discriminator_default_value()
+	{
+	    $this->assertFluentSetter($this->builder->setDiscriminator(
+	        $this->builder->discriminate()->field('custom_type')->setDefaultValue('test')
+        ));
+
+	    $this->assertEquals('test', $this->cm->discriminatorValue);
 	}
 
 	public function test_can_add_subclass_to_single_collection_inheritance_discriminator_map()
 	{
-		$this->assertFluentSetter($this->builder->addDiscriminatorMapping('article', TestUser::class));
+	    $discriminator = $this->builder->discriminate()->field('type');
+
+		$this->assertFluentSetter(
+		    $this->builder->setDiscriminator($discriminator->addMapping('article', TestUser::class))
+        );
+
 		$this->assertEquals(['article' => TestUser::class], $this->cm->discriminatorMap);
 	}
 
@@ -148,6 +178,15 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 	{
 		$this->assertFluentSetter($this->builder->addLifecycleEventListener('preUpdate', 'preUpdateMethod'));
 		$this->assertContains('preUpdateMethod', $this->cm->getLifecycleCallbacks('preUpdate'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_add_event_with_default_method()
+	{
+	    $this->assertFluentSetter($this->builder->addLifecycleEventListener('preUpdate'));
+	    $this->assertContains('preUpdate', $this->cm->getLifecycleCallbacks('preUpdate'));
 	}
 
 	/**
@@ -177,6 +216,50 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 
         $this->assertFluentSetter($this->builder->addField($field));
         $this->assertEquals(['customLoadField'], $this->cm->getFieldMapping('name')['alsoLoadFields']);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_write_concern()
+	{
+	    $this->builder->setWriteConcern('{w:1}');
+	    $this->assertEquals('{w:1}', $this->cm->writeConcern);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_add_reference()
+	{
+	    $reference = new \CImrie\ODM\Mapping\References\One();
+        $reference->document(TestUser::class)->property('user');
+
+	    $this->builder->addReference(
+	        $reference
+        );
+
+	    $this->assertTrue($this->cm->hasReference('user'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_version_documents()
+	{
+	    $this->builder->version();
+
+	    $this->assertTrue($this->cm->isVersioned);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_to_read_from_slaves()
+	{
+	    $this->builder->setSlaveOkay();
+
+	    $this->assertTrue($this->cm->slaveOkay);
 	}
 
 	private function assertFluentSetter($builder)

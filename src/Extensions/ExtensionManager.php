@@ -11,7 +11,11 @@ use Gedmo\DoctrineExtensions;
 
 class ExtensionManager
 {
+    /**
+     * @var Extension[]
+     */
     protected $extensions = [];
+
     /**
      * @var ManagerRegistry | IlluminateRegistry
      */
@@ -24,11 +28,18 @@ class ExtensionManager
      */
     protected $registeredIntoChain = [];
 
+    /**
+     * ExtensionManager constructor.
+     * @param ManagerRegistry $managerRegistry
+     */
     public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
     }
 
+    /**
+     * @param Extension[] $extensions
+     */
     public function boot(array $extensions)
     {
         foreach ($extensions as $extension)
@@ -37,6 +48,9 @@ class ExtensionManager
         }
     }
 
+    /**
+     * @param Extension $extension
+     */
     public function register(Extension $extension)
     {
         foreach($this->managerRegistry->getManagers() as $name => $manager)

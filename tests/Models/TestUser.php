@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Models;
+namespace CImrie\Odm\Tests\Models;
 
 class TestUser {
 

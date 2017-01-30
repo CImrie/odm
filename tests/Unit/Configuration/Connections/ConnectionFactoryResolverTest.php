@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Unit\Configuration\Connections;
+namespace CImrie\Odm\Tests\Unit\Configuration\Connections;
 
 
 use CImrie\ODM\Configuration\Connections\ConnectionResolver;

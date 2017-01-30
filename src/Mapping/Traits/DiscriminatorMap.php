@@ -4,24 +4,29 @@
 namespace CImrie\ODM\Mapping\Traits;
 
 
+use CImrie\ODM\Mapping\Discriminator;
+
 trait DiscriminatorMap
 {
-    public function discriminateOn($fieldName, $defaultName = null)
+    /**
+     * @var Discriminator
+     */
+    protected $discriminator;
+
+    public function discriminate()
     {
-        $this->mapping['discriminatorField'] = $fieldName;
+        $this->discriminator = new Discriminator();
 
-        if($defaultName)
-        {
-            $this->mapping['defaultDiscriminatorValue'] = $defaultName;
-        }
-
-        return $this;
+        return $this->discriminator;
     }
 
-    public function discriminateUsing(array $map)
+    public function asArray()
     {
-        $this->mapping['discriminatorMap'] = $map;
+        if(!$this->discriminator)
+        {
+            $this->discriminator = new Discriminator();
+        }
 
-        return $this;
+        return array_merge($this->mapping, $this->discriminator->asArray());
     }
 }

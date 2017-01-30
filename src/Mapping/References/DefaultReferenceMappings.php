@@ -20,11 +20,33 @@ trait DefaultReferenceMappings
         return $this;
     }
 
+    /**
+     * Alias of document method.
+     *
+     * @param $entity
+     * @return $this
+     */
     public function entity($entity)
     {
-        $this->mapping['targetDocument'] = $entity;
+        return $this->document($entity);
+    }
+
+    public function document($document)
+    {
+        $this->mapping['targetDocument'] = $document;
 
         return $this;
+    }
+
+    /**
+     * Alias of document method.
+     *
+     * @param $targetClass
+     * @return $this
+     */
+    public function target($targetClass)
+    {
+        return $this->document($targetClass);
     }
 
     public function storeAsDbRefWithDbName()

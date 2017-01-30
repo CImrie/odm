@@ -9,8 +9,8 @@ use CImrie\ODM\Configuration\Connections\ConnectionFactory;
 use CImrie\ODM\Configuration\Connections\ConnectionResolver;
 use CImrie\ODM\Configuration\MetaData\Metadata;
 use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
-use CImrie\ODM\Extensions\ExtensionManager;
 use CImrie\ODM\Laravel\Traits\OdmConfig;
+use CImrie\ODM\Logging\Loggable;
 use CImrie\ODM\Logging\Logger;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Autoloader;
@@ -34,6 +34,8 @@ use CImrie\ODM\Laravel\Console\UpdateSchemaCommand;
 class OdmServiceProvider extends ServiceProvider
 {
     use OdmConfig;
+
+    protected $defer = true;
 
     /**
      * Boot service provider.
@@ -64,6 +66,19 @@ class OdmServiceProvider extends ServiceProvider
         $this->registerExtensions();
     }
 
+    public function provides()
+    {
+        return [
+            MetaDataRegistry::class,
+            ConnectionResolver::class,
+            Logger::class,
+            ConfigurationFactory::class,
+            DocumentManagerRegistry::class,
+            DocumentManager::class,
+            'dm-registry'
+        ];
+    }
+
     public function registerMetadataDriverRegistry()
     {
         $this->app->tag($this->getConfig('metadata_drivers'), Metadata::class);
@@ -92,7 +107,7 @@ class OdmServiceProvider extends ServiceProvider
     {
         if($logger = $this->getConfig('logger'))
         {
-            $this->app->bind(Logger::class, $logger);
+            $this->app->bind(Loggable::class, $logger);
         }
     }
 
@@ -100,7 +115,7 @@ class OdmServiceProvider extends ServiceProvider
     {
         $this->app->bind(ConfigurationFactory::class, OdmConfigurationFactory::class);
         $this->app->singleton(DocumentManagerRegistry::class, function (Container $app) {
-            $registry = new IlluminateRegistry($app, $app->make(DocumentManagerFactory::class));
+            $registry = new LaravelManagerRegistry($app->make(DocumentManagerFactory::class));
             // Add all managers into the registry
             foreach ($this->getConfig('managers', []) as $manager => $managerSettings) {
                 $config = new Config($managerSettings, $this->getGlobalConfig('database.connections', []), $this->getConfig());
@@ -111,7 +126,7 @@ class OdmServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(DocumentManagerRegistry::class, ManagerRegistry::class);
-        $this->app->alias(DocumentManagerRegistry::class, IlluminateRegistry::class);
+        $this->app->alias(DocumentManagerRegistry::class, LaravelManagerRegistry::class);
         $this->app->alias(DocumentManagerRegistry::class, 'dm-registry');
 
     }
@@ -119,7 +134,7 @@ class OdmServiceProvider extends ServiceProvider
     public function registerDefaultDocumentManager()
     {
         // Bind the default Document Manager
-        $this->app->singleton(DocumentManager::class, function ($app) {
+        $this->app->singleton(DocumentManager::class, function (Container $app) {
             return $app->make(DocumentManagerRegistry::class)->getManager();
         });
 

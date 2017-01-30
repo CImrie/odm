@@ -4,7 +4,7 @@
 namespace CImrie\ODM\Laravel\Console;
 
 
-class GenerateRepositoriesCommand extends ODMCommand {
+class GenerateRepositoriesCommand extends OdmCommand {
 
 	protected $signature = 'odm:generate:repositories
     {--filter=* : A string pattern used to match documents that should be processed}

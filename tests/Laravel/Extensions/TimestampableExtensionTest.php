@@ -1,16 +1,17 @@
 <?php
 
 
-namespace Tests\Laravel\Extensions;
+namespace CImrie\Odm\Tests\Laravel\Extensions;
 
 
 use CImrie\ODM\Extensions\Timestampable\TimestampableExtension;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Gedmo\Timestampable\Traits\TimestampableDocument;
-use Tests\Traits\Odm as OdmTrait;
+use CImrie\Odm\Tests\Traits\Odm as OdmTrait;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
+use Tests\TestCase;
 
-class TimestampableExtensionTest extends \TestCase
+class TimestampableExtensionTest extends TestCase
 {
     use OdmTrait;
 

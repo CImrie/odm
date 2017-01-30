@@ -6,7 +6,7 @@ namespace CImrie\ODM\Laravel\Console;
 
 use Doctrine\ODM\MongoDB\Tools\Console\Command\Schema\ShardCommand;
 
-class ShardSchemaCommand extends ODMCommand {
+class ShardSchemaCommand extends OdmCommand {
 
 	protected $signature = 'odm:schema:shard
 	{--dm= : Shard schema for specific document manager}
