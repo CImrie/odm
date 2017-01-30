@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "22f56dde334803d340a2b00481037c42",
-    "content-hash": "c320c2ab7c08f06cc7dfebef8d63810c",
+    "hash": "f24dab0592389d6b72bbc19f6e0d8f18",
+    "content-hash": "4d71369915be8a9e6cca13d1c3e9c925",
     "packages": [
         {
             "name": "alcaeus/mongo-php-adapter",
@@ -4443,8 +4443,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "ext-mongo": "*"
-    },
-    "platform-dev": []
+    "platform": [],
+    "platform-dev": [],
+    "platform-overrides": {
+        "ext-mongo": "1.5.0"
+    }
 }
