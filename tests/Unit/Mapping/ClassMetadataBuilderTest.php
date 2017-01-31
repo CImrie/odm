@@ -145,7 +145,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 	public function can_set_discriminator_default_value()
 	{
 	    $this->assertFluentSetter($this->builder->setDiscriminator(
-	        $this->builder->discriminate()->field('custom_type')->setDefaultValue('test')
+	        $this->builder->discriminate()->field('custom_type')->withMap(['test' => TestUser::class])->setDefaultValue('test')
         ));
 
 	    $this->assertEquals('test', $this->cm->discriminatorValue);

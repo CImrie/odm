@@ -146,5 +146,6 @@ return [
     ],
     'connection_factories' => [
         'mongodb' => MongodbConnectionFactory::class
-    ]
+    ],
+    'use_custom_repositories' => true
 ];
