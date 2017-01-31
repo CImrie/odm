@@ -75,6 +75,33 @@ return [
 			]
 		]
 	],
+    /*
+     |------------------------------------------------------------
+     | Custom Repositories
+     |------------------------------------------------------------
+     |
+     | Set custom repositories here.
+     | You can provide a map of $documentClass => $repoClass.
+     | Alternatively if you require dependency injection, you can
+     | supply a 'provider' class.
+     |
+     | The provider class should implement:
+     | CImrie\ODM\Repositories\RepositoryMappingProvider
+     |
+     | This provider should return an array of closures that return
+     | a new instance of the repository for a yet-undetermined
+     | document manager, unit of work and class metadata.
+     |
+     | The provider class is resolved from the container so you can
+     | inject any requirements into its constructor.
+     |
+     */
+    'repositories' => [
+        'map' => [
+            // Document Class => Repository Class Name
+        ],
+        'provider' => null
+    ],
 	/*
 	|--------------------------------------------------------------------------
 	| Doctrine Extensions
@@ -84,7 +111,8 @@ return [
 	|
 	| Gedmo extensions are included by default with this package as they are
 	| frequently used. Set'use_extensions' to false if you wish to disable
-	| all extension-related activity (i.e. prevent load of OdmExtensionServiceProvider)
+	| all extension-related activity.
+	| (i.e. prevent load of OdmExtensionServiceProvider)
 	|
 	*/
 	'use_extensions' => true,
