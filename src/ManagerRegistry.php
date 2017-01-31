@@ -13,7 +13,7 @@ use Doctrine\ODM\MongoDB\Proxy\Proxy;
 use MongoDB\Exception\InvalidArgumentException;
 
 
-class LaravelManagerRegistry implements DocumentManagerRegistry
+class ManagerRegistry implements DocumentManagerRegistry
 {
     /**
      * @var array
@@ -130,6 +130,7 @@ class LaravelManagerRegistry implements DocumentManagerRegistry
     {
         return $this->getManager($persistentManagerName)->getRepository($persistentObject);
     }
+
 
     public function getManagerForClass($class)
     {

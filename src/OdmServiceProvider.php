@@ -12,7 +12,7 @@ use CImrie\ODM\Configuration\MetaData\MetaDataRegistry;
 use CImrie\ODM\Laravel\Traits\OdmConfig;
 use CImrie\ODM\Logging\Loggable;
 use CImrie\ODM\Logging\Logger;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry as ManagerRegistryInterface;
 use Doctrine\Common\Proxy\Autoloader;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Tools\Console\Command\GenerateHydratorsCommand;
@@ -64,6 +64,7 @@ class OdmServiceProvider extends ServiceProvider
         $this->registerAutoloader();
         $this->registerConsoleCommands();
         $this->registerExtensions();
+        $this->registerRepositories();
     }
 
     public function provides()
@@ -115,7 +116,7 @@ class OdmServiceProvider extends ServiceProvider
     {
         $this->app->bind(ConfigurationFactory::class, OdmConfigurationFactory::class);
         $this->app->singleton(DocumentManagerRegistry::class, function (Container $app) {
-            $registry = new LaravelManagerRegistry($app->make(DocumentManagerFactory::class));
+            $registry = new ManagerRegistry($app->make(DocumentManagerFactory::class));
             // Add all managers into the registry
             foreach ($this->getConfig('managers', []) as $manager => $managerSettings) {
                 $config = new Config($managerSettings, $this->getGlobalConfig('database.connections', []), $this->getConfig());
@@ -126,7 +127,7 @@ class OdmServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(DocumentManagerRegistry::class, ManagerRegistry::class);
-        $this->app->alias(DocumentManagerRegistry::class, LaravelManagerRegistry::class);
+        $this->app->alias(DocumentManagerRegistry::class, ManagerRegistry::class);
         $this->app->alias(DocumentManagerRegistry::class, 'dm-registry');
 
     }
@@ -148,7 +149,7 @@ class OdmServiceProvider extends ServiceProvider
      */
     public function registerAutoloader()
     {
-        $this->app->afterResolving(DocumentManagerRegistry::class, function (ManagerRegistry $registry) {
+        $this->app->afterResolving(DocumentManagerRegistry::class, function (ManagerRegistryInterface $registry) {
             /** @var DocumentManager $manager */
             foreach ($registry->getManagers() as $manager) {
                 Autoloader::register(
@@ -181,6 +182,14 @@ class OdmServiceProvider extends ServiceProvider
         if ($this->getConfig('use_extensions'))
         {
             $this->app->register(OdmExtensionServiceProvider::class);
+        }
+    }
+
+    public function registerRepositories()
+    {
+        if($this->getConfig('use_custom_repositories'))
+        {
+            $this->app->register(OdmRepositoryServiceProvider::class);
         }
     }
 

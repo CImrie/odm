@@ -48,7 +48,7 @@ class DocumentManagerFactory {
      */
     protected $logger;
 
-    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, CacheManager $cacheManager = null, ListenerRegistry $listenerRegistry, Loggable $logger = null)
+    public function __construct(ConfigurationFactory $configurationFactory, ConnectionResolver $connectionResolver, MetaDataRegistry $metadata, ListenerRegistry $listenerRegistry, CacheManager $cacheManager = null, Loggable $logger = null)
 	{
 		$this->configurationFactory = $configurationFactory;
 		$this->connectionResolver    = $connectionResolver;
@@ -188,7 +188,7 @@ class DocumentManagerFactory {
 	{
 		$registrations = $config->getSetting('events.subscribers') ?: [];
 
-		foreach($registrations as $event => $subscribers)
+		foreach($registrations as $subscribers)
 		{
 			if( ! is_array($subscribers))
 			{
@@ -197,7 +197,7 @@ class DocumentManagerFactory {
 
 			foreach($subscribers as $subscriber)
 			{
-				$manager->getEventManager()->addEventListener($event, $this->listenerRegistry->getSubscriber($subscriber));
+				$manager->getEventManager()->addEventSubscriber($this->listenerRegistry->getSubscriber($subscriber));
 			}
 		}
 	}
