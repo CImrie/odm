@@ -30,6 +30,7 @@ use CImrie\ODM\Laravel\Console\GenerateRepositoriesCommand;
 use CImrie\ODM\Laravel\Console\QueryCommand;
 use CImrie\ODM\Laravel\Console\ShardSchemaCommand;
 use CImrie\ODM\Laravel\Console\UpdateSchemaCommand;
+use Doctrine\Common\Persistence\ManagerRegistry as DoctrineManagerRegistry;
 
 class OdmServiceProvider extends ServiceProvider
 {
@@ -127,7 +128,7 @@ class OdmServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(DocumentManagerRegistry::class, ManagerRegistry::class);
-        $this->app->alias(DocumentManagerRegistry::class, ManagerRegistry::class);
+        $this->app->alias(DocumentManagerRegistry::class, DoctrineManagerRegistry::class);
         $this->app->alias(DocumentManagerRegistry::class, 'dm-registry');
 
     }
