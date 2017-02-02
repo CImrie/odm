@@ -9,15 +9,13 @@ use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 
 class Auto extends AbstractGenerator
 {
+    /**
+     * @var int
+     */
+    protected $generatorType = ClassMetadata::GENERATOR_TYPE_AUTO;
+
     public function __construct()
     {
         $this->generator = new AutoGenerator();
     }
-
-    public function commit(ClassMetadata $classMetadata)
-    {
-        $classMetadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_AUTO);
-        $classMetadata->setIdGenerator($this->generator);
-    }
-
 }

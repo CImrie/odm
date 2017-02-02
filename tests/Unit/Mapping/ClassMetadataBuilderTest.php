@@ -331,13 +331,11 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 	    $generator->setOptions(['pad' => 150]);
 	    $this->builder->setIdGenerator($generator);
 
+	    $generator->commit($cm = new ClassMetadata(TestAlsoLoadEntity::class));
+
 	    $this->assertInstanceOf(AlnumGenerator::class, $this->cm->idGenerator);
 
-	    $reflected = new \ReflectionClass($this->cm->idGenerator);
-	    $padding = $reflected->getProperty('pad');
-	    $padding->setAccessible(true);
-
-	    $this->assertEquals(150, $padding->getValue($this->cm->idGenerator));
+	    $this->assertEquals(150, $cm->generatorOptions['pad']);
 	}
 
 	private function assertFluentSetter($builder)

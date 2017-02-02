@@ -9,15 +9,13 @@ use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 
 class AlphaNumeric extends AbstractGenerator
 {
+    /**
+     * @var int
+     */
+    protected $generatorType = ClassMetadata::GENERATOR_TYPE_ALNUM;
+
     public function __construct()
     {
         $this->generator = new AlnumGenerator();
     }
-
-    public function commit(ClassMetadata $classMetadata)
-    {
-        $classMetadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_ALNUM);
-        $classMetadata->setIdGenerator($this->generator);
-    }
-
 }

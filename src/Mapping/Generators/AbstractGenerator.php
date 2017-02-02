@@ -5,6 +5,7 @@ namespace CImrie\ODM\Mapping\Generators;
 
 
 use Doctrine\ODM\MongoDB\Id\AbstractIdGenerator;
+use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 
 abstract class AbstractGenerator implements Generator
 {
@@ -13,12 +14,30 @@ abstract class AbstractGenerator implements Generator
      */
     protected $generator;
 
+    /**
+     * @var int
+     */
+    protected $generatorType;
+
+    /**
+     * @var array
+     */
+    protected $options = [];
+
     public function setOptions(array $options = [])
     {
-        foreach($options as $key => $value)
-        {
-            $method = 'set'.ucfirst($key);
-            $this->generator->$method($value);
-        }
+        $this->options = $options;
+        $this->options['class'] = self::class;
+
+        return $this;
+    }
+
+    public function commit(ClassMetadata $classMetadata)
+    {
+        $classMetadata->setIdGeneratorType($this->generatorType);
+        $classMetadata->setIdGenerator($this->generator);
+        $classMetadata->setIdGeneratorOptions($this->options);
+
+        return $this;
     }
 }
