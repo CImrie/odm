@@ -27,7 +27,7 @@ abstract class AbstractGenerator implements Generator
     public function setOptions(array $options = [])
     {
         $this->options = $options;
-        $this->options['class'] = self::class;
+        $this->options['class'] = get_class($this);
 
         return $this;
     }
