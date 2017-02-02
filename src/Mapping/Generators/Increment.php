@@ -9,15 +9,13 @@ use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 
 class Increment extends AbstractGenerator
 {
+    /**
+     * @var int
+     */
+    protected $generatorType = ClassMetadata::GENERATOR_TYPE_INCREMENT;
+
     public function __construct()
     {
         $this->generator = new IncrementGenerator();
     }
-
-    public function commit(ClassMetadata $classMetadata)
-    {
-        $classMetadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_INCREMENT);
-        $classMetadata->setIdGenerator($this->generator);
-    }
-
 }
