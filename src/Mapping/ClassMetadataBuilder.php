@@ -6,6 +6,7 @@ namespace CImrie\ODM\Mapping;
 
 use CImrie\ODM\Mapping\Embeds\Many;
 use CImrie\ODM\Mapping\Embeds\One;
+use CImrie\ODM\Mapping\Generators\Generator;
 use CImrie\ODM\Mapping\References\Reference as ReferenceBuilder;
 use CImrie\ODM\Mapping\Traits\DiscriminatorMap;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
@@ -209,6 +210,13 @@ class ClassMetadataBuilder
     public function setSlaveOkay($isOkay = true)
     {
         $this->cm->setSlaveOkay($isOkay);
+
+        return $this;
+    }
+
+    public function setIdGenerator(Generator $generator)
+    {
+        $generator->commit($this->cm);
 
         return $this;
     }

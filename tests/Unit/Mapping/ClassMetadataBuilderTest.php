@@ -5,12 +5,25 @@ namespace CImrie\Odm\Tests\Unit\Mapping;
 use CImrie\ODM\Mapping\Embeds\Many;
 use CImrie\ODM\Mapping\Embeds\One;
 use CImrie\ODM\Mapping\Field;
+use CImrie\ODM\Mapping\Generators\AlphaNumeric;
+use CImrie\ODM\Mapping\Generators\Auto;
+use CImrie\ODM\Mapping\Generators\Custom;
+use CImrie\ODM\Mapping\Generators\Generator;
+use CImrie\ODM\Mapping\Generators\Increment;
+use CImrie\ODM\Mapping\Generators\Uuid;
 use CImrie\ODM\Mapping\Index;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Doctrine\ODM\MongoDB\Id\AbstractIdGenerator;
+use Doctrine\ODM\MongoDB\Id\AlnumGenerator;
+use Doctrine\ODM\MongoDB\Id\AutoGenerator;
+use Doctrine\ODM\MongoDB\Id\IncrementGenerator;
+use Doctrine\ODM\MongoDB\Id\UuidGenerator;
 use Doctrine\ODM\MongoDB\Mapping\ClassMetadata;
 use CImrie\ODM\Mapping\ClassMetadataBuilder;
 use CImrie\Odm\Tests\Models\TestUser;
 use CImrie\Odm\Tests\Unit\Repositories\TestRepository;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as Odm;
+use Doctrine\ORM\Mapping\Builder\FieldBuilder;
 
 /**
  * Class ClassMetadataBuilderTest
@@ -262,6 +275,71 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 	    $this->assertTrue($this->cm->slaveOkay);
 	}
 
+	/**
+	 * @test
+	 */
+	public function can_set_generated_value_with_custom_generator()
+	{
+	    $underlyingGenerator = new CustomGenerator();
+	    $generator = new Custom($underlyingGenerator);
+	    $this->builder->setIdGenerator($generator);
+
+        $this->assertEquals($underlyingGenerator, $this->cm->idGenerator);
+        $this->assertEquals(ClassMetadata::GENERATOR_TYPE_CUSTOM, $this->cm->generatorType);
+        $this->assertEquals([], $this->cm->generatorOptions);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_auto_generated_value()
+	{
+	    $generator = new Auto();
+	    $this->builder->setIdGenerator($generator);
+
+	    $this->assertInstanceOf(AutoGenerator::class, $this->cm->idGenerator);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_increment_generator()
+	{
+	    $generator = new Increment();
+	    $this->builder->setIdGenerator($generator);
+
+	    $this->assertInstanceOf(IncrementGenerator::class, $this->cm->idGenerator);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_uuid_generated_value()
+	{
+	    $generator = new Uuid();
+	    $this->builder->setIdGenerator($generator);
+
+	    $this->assertInstanceOf(UuidGenerator::class, $this->cm->idGenerator);
+	}
+
+	/**
+	 * @test
+	 */
+	public function can_set_alnum_generated_value_and_generator_options()
+	{
+	    $generator = new AlphaNumeric();
+	    $generator->setOptions(['pad' => 150]);
+	    $this->builder->setIdGenerator($generator);
+
+	    $this->assertInstanceOf(AlnumGenerator::class, $this->cm->idGenerator);
+
+	    $reflected = new \ReflectionClass($this->cm->idGenerator);
+	    $padding = $reflected->getProperty('pad');
+	    $padding->setAccessible(true);
+
+	    $this->assertEquals(150, $padding->getValue($this->cm->idGenerator));
+	}
+
 	private function assertFluentSetter($builder)
 	{
 		$this->assertInstanceOf(ClassMetadataBuilder::class, $builder);
@@ -284,4 +362,13 @@ class TestAlsoLoadEntity {
      * @Odm\Field('type'='string') @Odm\AlsoLoad('fullName')
      */
     protected $name;
+}
+
+class CustomGenerator extends AbstractIdGenerator {
+
+    public function generate(DocumentManager $dm, $document)
+    {
+        return 'custom_id';
+    }
+
 }
