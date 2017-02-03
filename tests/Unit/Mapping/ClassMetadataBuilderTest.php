@@ -286,7 +286,7 @@ class ClassMetadataBuilderTest extends \PHPUnit_Framework_TestCase  {
 
         $this->assertEquals($underlyingGenerator, $this->cm->idGenerator);
         $this->assertEquals(ClassMetadata::GENERATOR_TYPE_CUSTOM, $this->cm->generatorType);
-        $this->assertEquals([], $this->cm->generatorOptions);
+        $this->assertEquals(['class' => CustomGenerator::class], $this->cm->generatorOptions);
 	}
 
 	/**
