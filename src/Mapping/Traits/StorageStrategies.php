@@ -34,6 +34,20 @@ trait StorageStrategies
         return $this;
     }
 
+    public function useAtomicSetStorageStrategy()
+    {
+        $this->useStorageStrategy('atomicSet');
+
+        return $this;
+    }
+
+    public function useAtomicSetArrayStorageStrategy()
+    {
+        $this->useStorageStrategy('atomicSetArray');
+
+        return $this;
+    }
+
     protected function useStorageStrategy($strategy)
     {
         $this->mapping['strategy'] = $strategy;
