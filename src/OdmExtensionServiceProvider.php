@@ -8,6 +8,7 @@ use CImrie\ODM\Common\Registries\DocumentManagerRegistry;
 use CImrie\ODM\Extensions\Extension;
 use CImrie\ODM\Extensions\ExtensionManager;
 use CImrie\ODM\Laravel\Traits\OdmConfig;
+use Doctrine\ODM\MongoDB\Mapping\Driver\AnnotationDriver;
 use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +25,12 @@ class OdmExtensionServiceProvider extends ServiceProvider
     {
         $enabledExtensions = $this->getConfig('extensions', []);
         $this->app->tag($enabledExtensions, Extension::class);
+
+        /*
+         * Always load annotation driver and annotations as gedmo depends on them
+         */
+        AnnotationDriver::registerAnnotationClasses();
+
 
         $this->app->singleton(ExtensionManager::class, function(Container $app) {
             return new ExtensionManager(
